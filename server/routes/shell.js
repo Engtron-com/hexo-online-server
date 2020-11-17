@@ -7,6 +7,7 @@ var path = require("path");
 var axios = require("axios");
 var url = require("url");
 var os = require('os');
+var multer = require('multer')
 
 var upload = multer({ dest: path.join(hexo.source_dir, '/img') })
 
