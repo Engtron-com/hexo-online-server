@@ -8,6 +8,10 @@ var axios = require("axios");
 var url = require("url");
 var os = require('os');
 
+var upload = multer({ dest: path.join(hexo.source_dir, '/img') })
+
+var info = {}
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
