@@ -274,13 +274,13 @@ function upload_file(file) {
     }
     catch (err) {
         return {
-            'url': hexo.config.imgUrl + '/img/' + info.type + '/' + file_name + '/' + file.originalname,
+            'url': 'img/' + info.type + '/' + file_name + '/' + file.originalname,
             'success': 1,
             'massage': err
         }
     }
     return {
-        'url': hexo.config.imgUrl + '/img/' + info.type + '/' + file_name + '/' + file.originalname,
+        'url': 'img/' + info.type + '/' + file_name + '/' + file.originalname,
         'success': 1,
         'massage': '上传成功'
     }
