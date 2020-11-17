@@ -7,7 +7,9 @@ var path = require("path");
 var axios = require("axios");
 var url = require("url");
 var os = require('os');
+var base_fs = require('fs')
 var multer = require('multer')
+var config = require('../../lib/getConfig')
 
 var upload = multer({ dest: path.join(hexo.source_dir, '/img') })
 
@@ -17,27 +19,24 @@ var info = {}
 router.get('/', function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
         switch (req.query.action) {
-            case "pull":
-                gitPull();
-                break;
-            case "push":
-                gitPush();
-                break;
+            case "get_postname":
+                info = {
+                    name: req.query.post,
+                    type: 'post'
+                }
+                break
+            case "get_postname":
+                info = {
+                    name: req.query.page,
+                    type: 'page'
+                }
+                break
             case "clean":
-                shell({ e: "hexo clean" });
+                hexoClean();
                 break;
-            case "generate": 
-                shell({ e: "hexo generate", next: () => { send("渲染完成", "success") } });
-                break;
-            case "deploy":
-                shell({ e: "hexo deploy", next: () => { send("部署完成","success") } });
-                break;
-            case "server":
-                hexoServer();
-                break;
-            case "close_server":
-                closeServer();
-                break;
+            case "generate":
+                hexoGenerate()
+                break
             case "new_post":
                 new_post(req.query.post);
                 break;
@@ -47,15 +46,22 @@ router.get('/', function (req, res, next) {
             case "save_post":
                 save_post(req.query.post, req.query.data);
                 break;
+            case "rename_post":
+                rename_post(req.query.old_name, req.query.new_name)
+                break
             case "new_page":
                 new_page(req.query.page);
                 break;
             case "delete_page":
-                delete_page(req.query.page);
+                var data = delete_page(req.query.page, res);
+                res.send(data)
                 break;
             case "save_page":
                 save_page(req.query.page, req.query.data);
                 break;
+            case "rename_page":
+                rename_page(req.query.old_name, req.query.new_name)
+                break
             default:
                 send("Undefined command","error");
                 break;
@@ -88,14 +94,7 @@ router.get('/', function (req, res, next) {
         res.render('login', { script: '' });
     }
 });
-function gitPull() {
-    let pull = olConfig.pull;
-    shell({
-        e: "cd " + hexo.base_dir, next: () => {
-            cmds(pull);
-        }
-    });
-}
+
 function cmds(commands, i = 0) {
     if (i < commands.length) {
         shell({
@@ -107,50 +106,19 @@ function cmds(commands, i = 0) {
         send("-----End-----");
     }
 }
-function gitPush() {
-    let push = olConfig.push;
+function hexoClean() {
     shell({
-        e: "cd " + hexo.base_dir, next: () => {
-            cmds(push);
+        e: "hexo clean", next: () => {
+            shell({ e: "hexo clean" });
         }
     });
 }
-function hexoServer() {
+function hexoGenerate() {
     shell({
         e: "hexo generate", next: () => {
-            shell({ e: "hexo server" });
+            shell({ e: "hexo generate" });
         }
     });
-}
-function closeServer() {
-    let reg = new RegExp(`^.*TCP.*?:${hexo.config.server.port || 4000}.*?LISTEN.*?([\\d]+)`, 'i');
-    if (/windows/gim.test(os.type())) {
-        shell({
-            e: `netstat -ano | findstr ${hexo.config.server.port || 4000}`, stdout: data => {
-                let results = data.split("\n");
-                for (let i = 0; i < results.length; i++) {
-                    let res = results[i] ? results[i].match(reg) : null;
-                    if (res && res[1]) {
-                        shell({ e: `taskkill /f /pid ${res[1]}`, sendLog: false, next: () => { } });
-                        break;
-                    }
-                }
-            }, next: () => { }
-        });
-    } else if (/linux/gim.test(os.type())) {
-        shell({
-            e: `netstat -tunlp | grep ${hexo.config.server.port || 4000}`, stdout: data => {
-                let results = data.split("\n");
-                for (let i = 0; i < results.length; i++) {
-                    let res = results[i] ? results[i].match(reg) : null;
-                    if (res && res[1]) {
-                        shell({ e: `kill ${res[1]}`, sendLog: false, next: () => { } });
-                        break;
-                    }
-                }
-            }, next: () => { }
-        });
-    }
 }
 function new_post(e) {
     shell({
@@ -161,7 +129,7 @@ function new_post(e) {
                     send("新建《" + e + "》文章成功","success");
                     send("", "reload");
                 }
-            }, 1000);
+            }, 100);
         }
     });
 }
@@ -178,13 +146,31 @@ function delete_post(e) {
 }
 function save_post(id, data) {
     let postName = id.replace("#", "").replace("%23", "");
-    fs.writeFile(path.join(hexo.source_dir, '_posts/', postName + ".md"), data, function (err) {
+    try{
+        fs.writeFileSync(path.join(hexo.source_dir, '_posts/', postName + ".md"), data)
+    }
+    catch (err) {
+        send("保存文章《" + postName + "》失败", "error");
+        return {
+            'code': 0,
+            'msg': "保存文章《" + postName + "》失败"
+        };
+    }
+    send("保存《" + postName + "》文章成功","success");
+    return {
+        'code': 0,
+        'msg': "保存文章《" + postName + "》成功"
+    };
+}
+function rename_post(old_name, new_name) {
+    old_name = old_name.replace("#", "").replace("%23", "");
+    base_fs.rename(path.join(hexo.source_dir, '_posts/', old_name + ".md"), path.join(hexo.source_dir, '_posts/', new_name + ".md"),function (err) {
         if (err) {
-            send("保存文章《" + postName + "》失败", "error");
-            return console.error(err);
+            console.log(err)
+            return
         }
-        send("保存《" + postName + "》文章成功","success");
-    });
+        send("", "reload");
+    })
 }
 function new_page(e) {
     shell({
@@ -204,32 +190,63 @@ function delete_page(e) {
     let files = fs.readdirSync(path.join(hexo.source_dir, page));
     if (files.length > 1) {
         send("\"" + page + "\"文件夹内有其他文件，请手动删除", "error");
-        return;
+        return {
+            'code': 2,
+            'msg': "\"" + page + "\"文件夹内有其他文件，请手动删除"
+        };
     }
     fs.unlink(path.join(hexo.source_dir, page, "index.md"), function (err) {
         if (err) {
             send("删除页面\"index.md\"文件失败", "error");
-            return console.error(err);
+            return {
+                'code': 1,
+                'msg': "删除页面\"index.md\"文件失败"
+            };
         }
         fs.rmdir(path.join(hexo.source_dir, page), function (err) {
             if (err) {
                 send("删除页面\"" + page + "\"失败", "error");
-                return console.error(err);
+                return {
+                    'code': 1,
+                    'msg': "删除页面\"" + page + "\"失败"
+                };
             }
             send("删除\"" + page + "\"页面成功","success");
             send("", "reload");
+            return {
+                'code': 0,
+                'msg': "删除\"" + page + "\"页面成功"
+            };
         });
     });
 }
 function save_page(id, data) {
     let page = id.replace("#", "").replace("%23", "");
-    fs.writeFile(path.join(hexo.source_dir, page, "index.md"), data, function (err) {
+    try {
+        fs.writeFileSync(path.join(hexo.source_dir, page, "index.md"), data)
+    }
+    catch (err) {
+        send("保存页面\"" + page + "\"失败", "error");
+        return {
+            'code': 0,
+            'msg': "保存页面\"" + page + "\"失败"
+        };
+    }
+    send("保存\"" + page + "\"页面成功","success");
+    return {
+        'code': 1,
+        'msg': "保存页面\"" + page + "\"成功"
+    };
+}
+function rename_page(old_name, new_name) {
+    old_name = old_name.replace("#", "").replace("%23", "");
+    base_fs.rename(path.join(hexo.source_dir, old_name), path.join(hexo.source_dir, new_name),function (err) {
         if (err) {
-            send("保存页面\"" + page + "\"失败", "error");
-            return console.error(err);
+            console.log(err)
+            return
         }
-        send("保存\"" + page + "\"页面成功","success");
-    });
+        send("", "reload");
+    })
 }
 function upload_file(file) {
     var file_name = info.name.replace("#", "").replace("%23", "")
