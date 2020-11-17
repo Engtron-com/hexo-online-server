@@ -82,7 +82,7 @@ router.get('/', function (req, res, next) {
                 res.send(data)
                 break;
             case "upload_file":
-                var data = upload_file(req.file)
+                var data = upload_file(req.file);
                 res.send(data)
                 break
             default:
