@@ -59,15 +59,21 @@ router.get('/', function (req, res, next) {
     } else {
         res.render('login', { script: '' });
     }
-}).post('/', function (req, res, next) {
+}).post('/', upload.single('editormd-image-file'), function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
         switch (req.query.action) {
             case "save_post":
-                save_post(req.body.post, req.body.data);
+                var data = save_post(req.body.post, req.body.data);
+                res.send(data)
                 break;
             case "save_page":
-                save_page(req.body.page, req.body.data);
+                var data = save_page(req.body.page, req.body.data);
+                res.send(data)
                 break;
+            case "upload_file":
+                var data = upload_file(req.file)
+                res.send(data)
+                break
             default:
                 send("Undefined command","error");
                 break;
@@ -219,5 +225,42 @@ function save_page(id, data) {
         }
         send("保存\"" + page + "\"页面成功","success");
     });
+}
+function upload_file(file) {
+    var file_name = info.name.replace("#", "").replace("%23", "")
+    var file1_path = path.join(file.destination, info.type)
+    var file2_path = path.join(file1_path, file_name)
+    var img_path = path.join(file2_path, file.originalname)
+    var my_file = file.path
+    if (!base_fs.existsSync(file1_path)) {
+        try {
+            base_fs.mkdirSync(file1_path)
+        }
+        catch (err) {
+
+        }
+    }
+    if (!base_fs.existsSync(file2_path)) {
+        try {
+            base_fs.mkdirSync(file2_path)
+        }
+        catch (err) {}
+    }
+    try{
+        base_fs.copyFileSync(my_file, img_path)
+        base_fs.unlinkSync(my_file)
+    }
+    catch (err) {
+        return {
+            'url': hexo.config.imgUrl + '/img/' + info.type + '/' + file_name + '/' + file.originalname,
+            'success': 1,
+            'massage': err
+        }
+    }
+    return {
+        'url': hexo.config.imgUrl + '/img/' + info.type + '/' + file_name + '/' + file.originalname,
+        'success': 1,
+        'massage': '上传成功'
+    }
 }
 module.exports = router;
