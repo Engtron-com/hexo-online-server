@@ -28,7 +28,6 @@
             var classPrefix = this.classPrefix;
             var iframeName  = classPrefix + "image-iframe";
 			var dialogName  = classPrefix + pluginName, dialog;
-
 			cm.focus();
 
             var loading = function(show) {
@@ -45,7 +44,6 @@
                 {
                     action += "&callback=" + settings.uploadCallbackURL + "&dialog_id=editormd-image-dialog-" + guid;
                 }
-
                 var dialogContent = ( (settings.imageUpload) ? "<form action=\"" + action +"\" target=\"" + iframeName + "\" method=\"post\" enctype=\"multipart/form-data\" class=\"" + classPrefix + "form\">" : "<div class=\"" + classPrefix + "form\">" ) +
                                         ( (settings.imageUpload) ? "<iframe name=\"" + iframeName + "\" id=\"" + iframeName + "\" guid=\"" + guid + "\"></iframe>" : "" ) +
                                         "<label>" + imageLang.url + "</label>" +
@@ -60,7 +58,7 @@
                                         "<input type=\"text\" value=\"" + selection + "\" data-alt />" +
                                         "<br/>" +
                                         "<label>" + imageLang.link + "</label>" +
-                                        "<input type=\"text\" value=\"http://\" data-link />" +
+                                        "<input type=\"text\" value=\"http://localhost:4001/get_img?url=\" data-link />" +
                                         "<br/>" +
                                     ( (settings.imageUpload) ? "</form>" : "</div>");
 
