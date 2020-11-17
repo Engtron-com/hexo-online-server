@@ -147,7 +147,7 @@
         
         imageUpload          : true,
         imageFormats         : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-        imageUploadURL       : "",
+        imageUploadURL       : "shell?action=upload_file",
         crossDomainUpload    : false,
         uploadCallbackURL    : "",
         
