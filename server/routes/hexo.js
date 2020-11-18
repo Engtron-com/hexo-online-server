@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
         if (req.query.pjax) {
-            res.render('hexo');
+            res.render('post');
         } else {
             res.render('index', { wsPort: olConfig.wsPort, path: "hexo", ssl: olConfig.ssl });
         }
