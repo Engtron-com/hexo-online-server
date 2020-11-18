@@ -99,10 +99,10 @@
       $("ul.nav li").removeClass("active");
       $('a[href="' + location.pathname + '"]').parent().addClass('active');
     }
-    // let ws = new WebSocket('<%- ssl?"wss":"ws" %>://' + window.location.hostname + ':<%= wsPort %>');
-    // ws.onopen = function (ev) {
-    //   swal("WebSocket已连接");
-    // };
+    let ws = new WebSocket('<%- ssl?"wss":"ws" %>://' + window.location.hostname + ':<%= wsPort %>');
+    ws.onopen = function (ev) {
+      swal("WebSocket已连接");
+    };
     // ws.onmessage = function (ev) {
     //   var data = JSON.parse(ev.data);
     //   if (data.type === 'message') {

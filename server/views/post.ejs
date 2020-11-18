@@ -137,7 +137,7 @@
         let titleEl = $('#txtTitle');
         let old_name = $(titleEl).attr('post-id');
         let val = $(titleEl).val();
-        if (old_name !== new_name) {
+        if (old_name !== val) {
             $.ajax({
                 url: '/shell?action=rename_page',
                 data: {
