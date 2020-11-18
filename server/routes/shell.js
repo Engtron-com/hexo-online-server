@@ -4,12 +4,12 @@ var shell = require("../../lib/shell");
 var dateFormat = require("../../lib/dateFormat");
 var fs = require("fs");
 var path = require("path");
-//var axios = require("axios");
-//var url = require("url");
+var axios = require("axios");
+var url = require("url");
 var os = require('os');
 var base_fs = require('fs')
 var multer = require('multer')
-//var config = require('../../lib/getConfig')
+var config = require('../../lib/getConfig')
 
 var upload = multer({ dest: path.join(hexo.source_dir, '/img') })
 
@@ -186,7 +186,7 @@ function hexoDeploy() {
     shell({ 
         e: "hexo deploy", next: () => { 
             shell({ e: "hexo deploy" });
-            //send("部署完成","success") 
+            send("部署完成","success") 
         } 
     });
 
@@ -316,7 +316,7 @@ function rename_page(old_name, new_name) {
             console.log(err)
             return
         }
-        //send(new_name, "success");
+        send(new_name, "success");
         return {
             'code': 1,
             'new_name': new_name
