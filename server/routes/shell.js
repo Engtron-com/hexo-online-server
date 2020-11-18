@@ -9,7 +9,8 @@ var url = require("url");
 var os = require('os');
 var base_fs = require('fs')
 var multer = require('multer')
-var config = require('../../lib/getConfig')
+var config = require('../../lib/getConfig');
+const { send } = require('server/reply');
 
 var upload = multer({ dest: path.join(hexo.source_dir, '/img') })
 
@@ -59,7 +60,8 @@ router.get('/', function (req, res, next) {
                 delete_post(req.query.post);
                 break;
             case "rename_post":
-                rename_post(req.query.old_name, req.query.new_name);
+                let data = rename_post(req.query.old_name, req.query.new_name);
+                res.send(data);
                 break
             case "new_page":
                 new_page(req.query.page);
@@ -240,7 +242,12 @@ function rename_post(old_name, new_name) {
             console.log(err)
             return
         }
+        send(new_name, "success");
         send("", "reload");
+        return {
+            'code':1,
+            'new_name': new_name
+        };
     })
 }
 function new_page(e) {
@@ -317,8 +324,9 @@ function rename_page(old_name, new_name) {
             return
         }
         send(new_name, "success");
+        send("", "reload");
         return {
-            'code': 1,
+            'code':1,
             'new_name': new_name
         };
     })

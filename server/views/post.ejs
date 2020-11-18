@@ -1,14 +1,15 @@
 <link rel="stylesheet" href="/css/editormd.min.css" />
 <script src="/editormd.min.js"></script>
 <script src="/hintDialog.js"></script>
+<script src="../../lib/dateFormat.js"></script>
 <div style="width: 20%;position: fixed;top: 65px;bottom: 0;">
     <div style="width: 100%;height: 5%;">
         <a name="new" href="/shell?action=new_post" wss type="button" class="btn btn-default">新建</a>
-        <a name="delete" href="/shell?action=delete_post" wss type="button" class="btn btn-default" post-id="#">删除</a>
+        <!-- <a name="delete" href="/shell?action=delete_post" wss type="button" class="btn btn-default" post-id="#">删除</a> -->
     </div>
-    <div style="width: 100%;height: 95%;overflow-x: hidden;overflow-y: scroll;">
+    <div style="width: 100%;height: 94%;overflow-x: hidden;overflow-y: scroll;background: #ffffff;">
         <% posts.forEach(function(post){ %>
-            <a href="#<%= post %>" class="list-group-item" post><%= post %></a>
+            <a href="#<%= post %>" class="list-group-item" post style="position: relative;"><%= post %><span class="delete" style="position: absolute;height: 30px; width: 30px;right: 15px;top: 0;bottom: 0;margin: auto;display: none;">X</span></a>
         <% }); %>
     </div>
 </div>
@@ -21,8 +22,14 @@
             </span> -->
         </div>
         <div class="article-bar__user-box flex flex--row flex--align-center" style="width: 10%;display: flex;flex-direction: row;justify-content: center;float: left;">
-            <button type="button" style="border: 1px solid #cccccc; margin: 0 10px;" class="el-button btn btn-save el-button--text">保存</button>
-            <button type="button" style="border: 1px solid #cccccc; margin: 0 10px;" class="el-button btn btn-publish el-button--primary">发布</button>
+            <button type="button" style="padding: 0 16px;
+            font-size: 16px;
+            color: #e33e33;
+            border: 1px solid #e33e33; margin: 0 10px;" class="el-button btn btn-save el-button--text">保存</button>
+            <button type="button" style="padding: 0 16px;
+            font-size: 16px;
+            color: #e33e33;
+            border: 1px solid #e33e33; margin: 0 10px;" class="el-button btn btn-publish el-button--primary">发布</button>
         </div>
     </div>
     <!-- <a name="rename" href="/shell?action=rename_post" wss type="button" class="btn btn-default" post-id="#">重命名</a> -->
@@ -139,7 +146,7 @@
         let val = $(titleEl).val();
         if (old_name !== val) {
             $.ajax({
-                url: '/shell?action=rename_page',
+                url: '/shell?action=rename_post',
                 data: {
                     old_name: old_name,
                     new_name: val
@@ -147,6 +154,7 @@
                 type: 'get',
                 success : function(res) {
                     $(currentEl).text(res.new_name);
+                    alert(res.new_name);
                     $.ajax({
                         url: '/shell?action=save_post',
                         data: {
@@ -178,9 +186,10 @@
     });
     $(".btn-publish").click(function () {
         $.get("/shell?action=clean", function (data, status, xhr) {
-            if (status === "success") {      
+            if (status === "success") {  
                 $.get("/shell?action=generate");
             }
         })
     });
+    $('#txtTitle').attr('placeholder', dateFormat('YYYY-MM-DD'));
 </script>
