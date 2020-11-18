@@ -15,7 +15,7 @@
 <div class="btn-group" style="position: fixed;margin-left: 20%;width: 80%;"> 
     <div class="el-form-item__content" style="width:100%;height:5%;background-color: #f3f3f3;">
         <div class="input__title flex1 el-input" style="width: 90%;height: 38px; float: left;">
-            <input type="text" style=" width: 100%;height: 38px;border: 1px solid #f3f3f3;background: #ffffff;color: #4d4d4d;" autocomplete="off" id="txtTitle" post-id="#" maxlength="100" placeholder="2020-11-18" class="el-input__inner"/>
+            <input type="text" style=" width: 100%;outline: none; height: 38px;border: 1px solid #f3f3f3;background: #ffffff;color: #4d4d4d;" autocomplete="off" id="txtTitle" post-id="#" maxlength="100" placeholder="2020-11-18" class="el-input__inner"/>
             <!-- <span class="el-input__suffix"><span class="el-input__suffix-inner">
             <span class="el-input__count"><span class="el-input__count-inner">10/100</span></span></span>
             </span> -->
@@ -46,8 +46,8 @@
         }, function (data, status, xhr) {
             if (status === "success" && data.success) {
                 var editor = editormd("editor", {
-                    width: "75%",
-                    height: "84%",
+                    width: "100%",
+                    height: "95%",
                     markdown: data.data, // dynamic set Markdown text
                     path: "/lib/" // Autoload modules mode, codemirror, marked... dependents libs path
                 });
@@ -70,6 +70,7 @@
             post: postId
         });
     });
+    $("a[post]")[0] && $("a[post]")[0].click();
     $("a[wss]").bind("click", function (e) {
         let href=$(this).attr("href");
         switch ($(this).attr("name")) {
