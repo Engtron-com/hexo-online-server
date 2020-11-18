@@ -4,12 +4,12 @@ var shell = require("../../lib/shell");
 var dateFormat = require("../../lib/dateFormat");
 var fs = require("fs");
 var path = require("path");
-var axios = require("axios");
-var url = require("url");
+//var axios = require("axios");
+//var url = require("url");
 var os = require('os');
 var base_fs = require('fs')
 var multer = require('multer')
-var config = require('../../lib/getConfig')
+//var config = require('../../lib/getConfig')
 
 var upload = multer({ dest: path.join(hexo.source_dir, '/img') })
 
@@ -19,6 +19,12 @@ var info = {}
 router.get('/', function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
         switch (req.query.action) {
+            case "pull":
+                gitPull();
+                break;
+            case "push":
+                gitPush();
+                break;
             case "get_postname":
                 info = {
                     name: req.query.post,
@@ -34,20 +40,26 @@ router.get('/', function (req, res, next) {
             case "clean":
                 hexoClean();
                 break;
-            case "generate":
-                hexoGenerate()
-                break
+            case "generate": 
+                hexoGenerate();
+                break;
+            case "deploy":
+                hexoDeploy();
+                break;
+            case "server":
+                hexoServer();
+                break;
+            case "close_server":
+                closeServer();
+                break;
             case "new_post":
                 new_post(req.query.post);
                 break;
             case "delete_post":
                 delete_post(req.query.post);
                 break;
-            case "save_post":
-                save_post(req.query.post, req.query.data);
-                break;
             case "rename_post":
-                rename_post(req.query.old_name, req.query.new_name)
+                rename_post(req.query.old_name, req.query.new_name);
                 break
             case "new_page":
                 new_page(req.query.page);
@@ -55,9 +67,6 @@ router.get('/', function (req, res, next) {
             case "delete_page":
                 var data = delete_page(req.query.page, res);
                 res.send(data)
-                break;
-            case "save_page":
-                save_page(req.query.page, req.query.data);
                 break;
             case "rename_page":
                 rename_page(req.query.old_name, req.query.new_name)
@@ -94,7 +103,14 @@ router.get('/', function (req, res, next) {
         res.render('login', { script: '' });
     }
 });
-
+function gitPull() {
+    let pull = olConfig.pull;
+    shell({
+        e: "cd " + hexo.base_dir, next: () => {
+            cmds(pull);
+        }
+    });
+}
 function cmds(commands, i = 0) {
     if (i < commands.length) {
         shell({
@@ -106,6 +122,14 @@ function cmds(commands, i = 0) {
         send("-----End-----");
     }
 }
+function gitPush() {
+    let push = olConfig.push;
+    shell({
+        e: "cd " + hexo.base_dir, next: () => {
+            cmds(push);
+        }
+    });
+}
 function hexoClean() {
     shell({
         e: "hexo clean", next: () => {
@@ -113,12 +137,58 @@ function hexoClean() {
         }
     });
 }
+function hexoServer() {
+    shell({
+        e: "hexo generate", next: () => {
+            shell({ e: "hexo server" });
+        }
+    });
+}
+function closeServer() {
+    let reg = new RegExp(`^.*TCP.*?:${hexo.config.server.port || 4000}.*?LISTEN.*?([\\d]+)`, 'i');
+    if (/windows/gim.test(os.type())) {
+        shell({
+            e: `netstat -ano | findstr ${hexo.config.server.port || 4000}`, stdout: data => {
+                let results = data.split("\n");
+                for (let i = 0; i < results.length; i++) {
+                    let res = results[i] ? results[i].match(reg) : null;
+                    if (res && res[1]) {
+                        shell({ e: `taskkill /f /pid ${res[1]}`, sendLog: false, next: () => { } });
+                        break;
+                    }
+                }
+            }, next: () => { }
+        });
+    } else if (/linux/gim.test(os.type())) {
+        shell({
+            e: `netstat -tunlp | grep ${hexo.config.server.port || 4000}`, stdout: data => {
+                let results = data.split("\n");
+                for (let i = 0; i < results.length; i++) {
+                    let res = results[i] ? results[i].match(reg) : null;
+                    if (res && res[1]) {
+                        shell({ e: `kill ${res[1]}`, sendLog: false, next: () => { } });
+                        break;
+                    }
+                }
+            }, next: () => { }
+        });
+    }
+}
 function hexoGenerate() {
     shell({
         e: "hexo generate", next: () => {
             shell({ e: "hexo generate" });
         }
     });
+}
+function hexoDeploy() {
+    shell({ 
+        e: "hexo deploy", next: () => { 
+            shell({ e: "hexo deploy" });
+            //send("部署完成","success") 
+        } 
+    });
+
 }
 function new_post(e) {
     shell({
