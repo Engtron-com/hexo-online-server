@@ -69,7 +69,8 @@ router.get('/', function (req, res, next) {
                 res.send(data)
                 break;
             case "rename_page":
-                rename_page(req.query.old_name, req.query.new_name)
+                var data = rename_page(req.query.old_name, req.query.new_name);
+                res.send(data);
                 break
             default:
                 send("Undefined command","error");
@@ -315,7 +316,11 @@ function rename_page(old_name, new_name) {
             console.log(err)
             return
         }
-        send("", "reload");
+        //send(new_name, "success");
+        return {
+            'code': 1,
+            'new_name': new_name
+        };
     })
 }
 function upload_file(file) {

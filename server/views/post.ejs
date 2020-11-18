@@ -1,22 +1,40 @@
 <link rel="stylesheet" href="/css/editormd.min.css" />
 <script src="/editormd.min.js"></script>
-<div style="width: 25%;position: fixed;top: 65px;bottom: 0;overflow-x: hidden;overflow-y: scroll;">
-    <% posts.forEach(function(post){ %>
-    <a href="#<%= post %>" class="list-group-item" post><%= post %></a>
-    <% }); %>
+<div style="width: 20%;position: fixed;top: 0px;bottom: 0;overflow-x: hidden;">
+    <div style="width: 100%;height: 10%;">
+        <a name="new" href="/shell?action=new_post" wss type="button" class="btn btn-default">新建</a>
+        <a name="delete" href="/shell?action=delete_post" wss type="button" class="btn btn-default" post-id="#">删除</a>
+    </div>
+    <div style="width: 100%;height: 90%;overflow-x: hidden;overflow-y: scroll;">
+        <% posts.forEach(function(post){ %>
+            <a href="#<%= post %>" class="list-group-item" post><%= post %></a>
+        <% }); %>
+    </div>
 </div>
-<div class="btn-group" style="position: fixed;top: 65px;margin-left: 25%;width: 75%;">
-    <a name="new" href="/shell?action=new_post" wss type="button" class="btn btn-default">新建文章</a>
-    <a name="save" href="/shell?action=save_post" wss type="button" class="btn btn-default" post-id="#">保存当前文章</a>
-    <a name="delete" href="/shell?action=delete_post" wss type="button" class="btn btn-default" post-id="#">删除当前文章</a>
-    <a name="rename" href="/shell?action=rename_post" wss type="button" class="btn btn-default" post-id="#">重命名</a>
-</div>
-<div id="editor" style="position: fixed;top: 100px;margin-left: 25%;width: 75%;height: 84%;">
+<div class="btn-group" style="position: fixed;margin-left: 20%;width: 80%;"> 
+    <div class="el-form-item__content" style="margin-left: 0px;">
+        <div class="input__title flex1 el-input">
+            <input type="text" autocomplete="off" id="txtTitle" post-id="#" maxlength="100" placeholder="2020-11-18" class="el-input__inner"/>
+            <!-- <span class="el-input__suffix"><span class="el-input__suffix-inner">
+            <span class="el-input__count"><span class="el-input__count-inner">10/100</span></span></span>
+            </span> -->
+        </div>
+        <div class="article-bar__user-box flex flex--row flex--align-center">
+            <button type="button" class="el-button btn btn-save el-button--text">保存</button>
+            <button type="button" class="el-button btn btn-publish el-button--primary">发布</button>
+        </div>
+    </div>
+<!-- <a name="rename" href="/shell?action=rename_post" wss type="button" class="btn btn-default" post-id="#">重命名</a> -->
+<div id="editor" style="position: fixed;top: 100px;margin-left: 20%;width: 80%;height: 84%;">
 </div>
 <script>
-    $(".list-group-item").bind("click", function () {
+    $(".list-group-item").bind("click", function (e) {
         $(".list-group-item").removeClass("active");
         $(this).addClass("active");
+        let titleEl = document.getElementById('txtTitle');
+        let title = e.target.innerText || '#';
+        $(titleEl).val(title);
+        $(titleEl).attr('post-id', title);
     });
     $("a[post]").bind("click", function () {
         let postId = $(this).attr("href");
@@ -106,5 +124,56 @@
                 break;
         }
         return false;
+    });
+    $(".btn-save").click(function () {
+        let currentEl = $(".list-group-item.active");
+        let titleEl = $('#txtTitle');
+        let old_name = $(titleEl).attr('post-id');
+        let val = $(titleEl).val();
+        if (old_name !== new_name) {
+            $.ajax({
+                url: '/shell?action=rename_page',
+                data: {
+                    old_name: old_name,
+                    new_name: val
+                },
+                type: 'get',
+                success : function(res) {
+                    $(currentEl).text(res.new_name);
+                    $.ajax({
+                        url: '/shell?action=save_post',
+                        data: {
+                            post: res.new_name,
+                            data: $(".editormd-markdown-textarea").val()
+                        },
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (res) {
+                            alert(res.msg)
+                        }
+                    })
+                }
+            })
+        } else {
+            $.ajax({
+                url: '/shell?action=save_post',
+                data: {
+                    post:  $(currentEl).text(),
+                    data: $(".editormd-markdown-textarea").val()
+                },
+                type: 'post',
+                dataType: 'json',
+                success: function (res) {
+                    alert(res.msg)
+                }
+            })
+        }
+    });
+    $(".btn-publish").click(function () {
+        $.get("/shell?action=clean", function (data, status, xhr) {
+            if (status === "success") {      
+                $.get("/shell?action=generate");
+            }
+        })
     });
 </script>
