@@ -339,10 +339,6 @@ function upload_file(file) {
     var img_path = path.join(file2_path, file.originalname)
     var my_file = file.path;
   
-    let oldName = file1_path + file.originalname;
-    let newName = new Date().getTime() +'_'+ file.originalname;
-    base_fs.renameSync(oldName, file1_path + newName); //修改图片默认地址
-    
     if (!base_fs.existsSync(file1_path)) {
         try {
             base_fs.mkdirSync(file1_path)
@@ -363,11 +359,14 @@ function upload_file(file) {
     }
     catch (err) {
         return {
-            'url': '/img/' + info.type + '/' + file_name + '/' + newName,
+            'url': '/img/' + info.type + '/' + file_name + '/' + file.originalname,
             'success': 1,
             'massage': err
         }
     }
+    let oldName = file1_path +'/'+ file.originalname;
+    let newName = new Date().getTime() +'_'+ file.originalname;
+    base_fs.renameSync(oldName, file1_path+'/'+ newName); //修改图片默认地址
     return {
         'url': '/img/' + info.type + '/' + file_name + '/' + newName,
         'success': 1,
