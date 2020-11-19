@@ -6,7 +6,6 @@ var path = require("path");
 /* GET home page. */
 router.get('/', function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
-        debugger
         fs.readdir(path.join(hexo.source_dir, '_posts'), function (err, files) {
             if (err) {
                 res.render('post', { posts: [] });
@@ -17,11 +16,11 @@ router.get('/', function (req, res, next) {
                 return e.replace(/\.md$/, '');
             });
             console.log(posts)
-            alert(req.query.pjax)
+            console.log(req.query.pjax)
             if (req.query.pjax) {
-                res.render('post', { posts, autoSave: olConfig.autoSave });
+                res.render('post', { posts: posts, autoSave: olConfig.autoSave });
             } else {
-                res.render('index', { wsPort: olConfig.wsPort, path: "post", posts, autoSave: olConfig.autoSave, ssl: olConfig.ssl });
+                res.render('index', { wsPort: olConfig.wsPort, path: "post", posts: posts, autoSave: olConfig.autoSave, ssl: olConfig.ssl });
             }
         });
     } else {
