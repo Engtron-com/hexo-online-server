@@ -364,9 +364,12 @@ function upload_file(file) {
             'massage': err
         }
     }
-    let oldName = file1_path +'/'+ file.originalname;
+    console.log(img_path);
+    console.log(file2_path);
+    console.log(file1_path);
+    let oldName = img_path +'/'+ file.originalname;
     let newName = new Date().getTime() +'_'+ file.originalname;
-    base_fs.renameSync(oldName, file1_path+'/'+ newName); //修改图片默认地址
+    base_fs.renameSync(oldName, img_path+'/'+ newName); //修改图片默认地址
     return {
         'url': '/img/' + info.type + '/' + file_name + '/' + newName,
         'success': 1,
