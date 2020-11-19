@@ -83,21 +83,21 @@
         let href=$(this).attr("href");
         switch ($(this).attr("name")) {
             case "new":
-                // var val = prompt("请输入文章标题：")
-                // var c = function (val, ev) {
+                var val = prompt("请输入文章标题：")
+                var c = function (val, ev) {
                     ev.preventDefault();
                     let name = dateFormat('YYYY-MM-DD');
-                    //if (val) {
+                    if (val) {
                         $.get(href, {
-                            post: name+'.md'
+                            post: name +''
                         }, function (data, status) {
                             if (status === "success") {  
                                 alert(data)
                             }
                         });
-                    //}
-                //};
-                //c(val, e)
+                    }
+                };
+                c(val, e)
                 break;
             case "delete":
                 let that = this;
@@ -160,6 +160,7 @@
                 type: 'get',
                 success : function(res) {
                     $(currentEl).text(res.new_name);
+                    alert(res.new_name)
                     $.ajax({
                         url: '/shell?action=save_post',
                         data: {
@@ -184,7 +185,7 @@
                 type: 'post',
                 dataType: 'json',
                 success: function (res) {
-                    
+                    swal("保存成功", "success");
                 }
             })
         }
