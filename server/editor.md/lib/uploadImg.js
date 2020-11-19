@@ -40,32 +40,52 @@ function initPasteDragImg(Editor){
 function uploadImg(file,Editor){
     var formData = new FormData();
     var fileName=new Date().getTime()+"."+file.name.split(".").pop();
-    formData.append('file', file,file.name); 
-    $.ajax({
-    	"type": 'POST',  
-        "url": Editor.settings.imageUploadURL,//获取我们配置的url
-        "data": formData,
-        "dateType": "json",
-        "processData": false,
-        "contentType": false,
-        "mimeType": "multipart/form-data",
-        success: function(ret){
-        	var json = $.parseJSON(ret);
-        	if(json.success){
-        		var url = json.body;
-        		var type = json.type; 
-        		if(/(png|jpg|jpeg|gif|bmp|ico|image)/.test(type)){
-                    Editor.insertValue("![图片alt]("+url+")");
-                }else{
-                    Editor.insertValue("[下载附件]("+url+")");
-                }    
-        	}else{
-        		alert("上传失败");
-        	}
+    formData.append('file', file, file.name); 
+    // $.ajax({
+    // 	"type": 'post',  
+    //     "url": Editor.settings.imageUploadURL,//获取我们配置的url
+    //     "data": formData,
+    //     "dateType": "json",
+    //     "processData": false,
+    //     "contentType": false,
+    //     "mimeType": "multipart/form-data",
+    //     success: function(ret){
+    //     	var json = $.parseJSON(ret);
+    //     	if(json.success){
+    //     		var url = json.body;
+    //     		var type = json.type; 
+    //     		if(/(png|jpg|jpeg|gif|bmp|ico|image)/.test(type)){
+    //                 Editor.insertValue("![图片alt]("+url+")");
+    //             }else{
+    //                 Editor.insertValue("[下载附件]("+url+")");
+    //             }    
+    //     	}else{
+    //     		alert("上传失败");
+    //     	}
               
+    //     },
+    //     error: function (err){
+    //         console.log('请求失败')
+    //     } 
+    // });
+    $.ajax({
+        type : 'post',
+        url : Editor.settings.imageUploadURL,
+        //data: formData ,
+        processData:false,
+        async:false,
+        cache: false,  
+        contentType: false, 
+        success:function(re){
+            let url = re.url;
+            if(/(png|jpg|jpeg|gif|bmp|ico|image)/.test(url)){
+                Editor.insertValue("![图片alt]("+url+")");
+            }else{
+                Editor.insertValue("[下载附件]("+url+")");
+            }    
         },
-        error: function (err){
-            console.log('请求失败')
-        } 
-    });
+        error:function(e){
+            console.log(e);
+        }
+    })
 }

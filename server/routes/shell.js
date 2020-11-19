@@ -10,6 +10,7 @@ var os = require('os');
 var base_fs = require('fs')
 var multer = require('multer')
 var config = require('../../lib/getConfig');
+var multiparty = require('multiparty');
 
 var upload = multer({ dest: path.join(hexo.source_dir, '/img') })
 
@@ -97,7 +98,7 @@ router.get('/', function (req, res, next) {
             case "upload_file":
                 data = upload_file(req.file);
                 res.send(data)
-                break
+                break;
             default:
                 send("Undefined command","error");
                 break;
@@ -369,4 +370,25 @@ function upload_file(file) {
         'massage': '上传成功'
     }
 }
+function uploadUser_ImgPre(req, res, next) {
+    //生成multiparty对象，并配置上传目标路径
+    var form = new multiparty.Form({uploadDir: './public/files/images', encoding : 'utf-8'});
+    form.parse(req, function(err, fields, files) {
+      var filesTmp = JSON.stringify(files);
+      if(err){
+        return {
+            'success':0,
+            'massage': '上传失败'
+        }
+      } else {
+        testJson = eval("(" + filesTmp+ ")"); 
+        console.log(testJson.fileField[0].path);
+        return { 
+            'success': 1,
+            'massage': '上传成功',
+            'url': testJson.fileField[0].path 
+        }
+      }
+    });
+  }
 module.exports = router;

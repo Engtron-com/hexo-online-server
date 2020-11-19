@@ -110,7 +110,7 @@
         let titleEl = $('#txtTitle');
         let old_name = $(titleEl).attr('page-id');
         let val = $(titleEl).val();
-        if (old_name !== val) {
+        if (val && old_name !== val) {
             $.ajax({
                 url: '/shell?action=rename_page',
                 data: {
