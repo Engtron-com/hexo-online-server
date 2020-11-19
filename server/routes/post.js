@@ -12,8 +12,11 @@ router.get('/', function (req, res, next) {
                 console.error(err);
                 return;
             }
-            let posts = files.filter((e, i) => {
-                return e.indexOf('.md') !== -1 && e.replace(/\.md$/, '');
+            let posts = [];
+            files.map((e, i) => {
+                if (e.indexOf('.md') !== -1) {
+                    posts.push(e.replace(/\.md$/, ''));
+                }
             });
             if (req.query.pjax) {
                 res.render('post', { posts, autoSave: olConfig.autoSave });
