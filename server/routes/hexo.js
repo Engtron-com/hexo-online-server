@@ -4,7 +4,6 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
-        console.log(req)
         if (req.query.pjax) {
             res.render('post');
         } else {
