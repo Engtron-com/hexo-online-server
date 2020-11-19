@@ -38,9 +38,8 @@ function initPasteDragImg(Editor){
     })
 }
 function uploadImg(file,Editor){
-    var formData = new FormData();
-    var fileName=new Date().getTime()+"."+file.name.split(".").pop();
-    formData.append('file', file, file.name); 
+    let formData = new FormData();
+    formData.append('editormd-image-file', file); 
     // $.ajax({
     // 	"type": 'post',  
     //     "url": Editor.settings.imageUploadURL,//获取我们配置的url
@@ -71,7 +70,7 @@ function uploadImg(file,Editor){
     $.ajax({
         type : 'post',
         url : Editor.settings.imageUploadURL,
-        //data: formData ,
+        data: formData,
         processData:false,
         async:false,
         cache: false,  
