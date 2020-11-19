@@ -6,6 +6,7 @@ var path = require("path");
 /* GET home page. */
 router.get('/', function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
+        debugger
         fs.readdir(path.join(hexo.source_dir, '_posts'), function (err, files) {
             if (err) {
                 res.render('post', { posts: [] });
@@ -15,6 +16,8 @@ router.get('/', function (req, res, next) {
             let posts = files.map((e, i) => {
                 return e.replace(/\.md$/, '');
             });
+            console.log(posts)
+            alert(req.query.pjax)
             if (req.query.pjax) {
                 res.render('post', { posts, autoSave: olConfig.autoSave });
             } else {

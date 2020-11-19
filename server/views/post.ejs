@@ -4,7 +4,8 @@
 <script src="../../lib/dateFormat.js"></script>
 <div style="width: 20%;position: fixed;top: 65px;bottom: 0;">
     <div style="width: 100%;height: 5%;">
-        <a name="new" href="/shell?action=new_post" wss type="button" class="btn btn-default">新建</a>
+        <input type="text" id="search" style="width: 80%;height: 38px;border: 1px solid #f3f3f3;background: #ffffff;color: #4d4d4d;" placeholder="搜索" />
+        <a name="new" href="/shell?action=new_post" style="width: 20%;" wss type="button" class="btn btn-default">新建</a>
         <!-- <a name="delete" href="/shell?action=delete_post" wss type="button" class="btn btn-default" post-id="#">删除</a> -->
     </div>
     <div style="width: 100%;height: 94%;overflow-x: hidden;overflow-y: scroll;background: #ffffff;">
@@ -190,6 +191,22 @@
                 $.get("/shell?action=generate");
             }
         })
+    });
+    $("#search").bind('input', function(e) {
+        let val = e.target.value;
+        let aList = document.querySelectorAll('.list-group-item');
+        if (!val) {
+            aList.forEach( aEl => {
+                aEl.style.display = 'inline-block';
+            })
+        } else {
+            aList.forEach( aEl => {
+                let text = aEl.innerText;
+                if (!text || !text.indexOf(val) === -1) {
+                    aEl.style.display = 'none';
+                }
+            })
+        }
     });
     $('#txtTitle').attr('placeholder', dateFormat('YYYY-MM-DD'));
 </script>
