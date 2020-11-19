@@ -4,7 +4,7 @@ var fs = require("fs");
 var path = require("path");
 
 /* GET home page. */
-router.get('/post?pjax=true', function (req, res, next) {
+router.get('/', function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
         fs.readdir(path.join(hexo.source_dir, '_posts'), function (err, files) {
             if (err) {
@@ -15,8 +15,7 @@ router.get('/post?pjax=true', function (req, res, next) {
             let posts = files.map((e, i) => {
                 return e.replace(/\.md$/, '');
             });
-            console.log(posts)
-            console.log(req.query.pjax)
+            console.log('2')
             if (req.query.pjax) {
                 res.render('post', { posts, autoSave: olConfig.autoSave });
             } else {

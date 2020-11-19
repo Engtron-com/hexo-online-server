@@ -132,21 +132,13 @@
     //   swal("\nWebSocket连接出错", "error");
     //   console.log(ev);
     // };
+    getPageParams('/post');
     $("a[pjax]").bind("click", function (e) {
       if (window.autoSave) clearInterval(window.autoSave);
       $("ul.nav li").removeClass("active");
       $(this).parent().addClass('active');
       let path = $(this).attr("href");
-      $.get($(this).attr("href"), {
-        pjax: true
-      }, function (data, status, xhr) {
-        if (status === "success") {
-          window.history.pushState({
-            status: 0
-          }, '', path)
-          $("#container").html(data);
-        }
-      });
+      getPageParams(path);
       return false;
     });
 
@@ -171,6 +163,20 @@
             break;
         }
       }
+    }
+
+    function getPageParams(href) {
+      console.log('1')
+      $.get(href, {
+        pjax: true
+      }, function (data, status, xhr) {
+        if (status === "success") {
+          window.history.pushState({
+            status: 0
+          }, '', href);
+          $("#container").html(data);
+        }
+      });
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>

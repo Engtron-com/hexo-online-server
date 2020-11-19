@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/css/editormd.min.css" />
 <script src="/editormd.min.js"></script>
 <script src="/hintDialog.js"></script>
-<script src="../../lib/dateFormat.js"></script>
+<script src="/lib/dateFormat.js"></script>
 <div style="width: 20%;position: fixed;top: 65px;bottom: 0;">
     <div style="width: 100%;height: 5%;">
         <input type="text" id="search" style="width: 80%;height: 38px;border: 1px solid #f3f3f3;background: #ffffff;color: #4d4d4d;" placeholder="搜索" />
@@ -10,7 +10,7 @@
     </div>
     <div style="width: 100%;height: 94%;overflow-x: hidden;overflow-y: scroll;background: #ffffff;">
         <% posts.forEach(function(post){ %>
-            <a href="#<%= post %>" class="list-group-item" post style="position: relative;"><%= post %><span class="delete" style="position: absolute;height: 30px; width: 30px;right: 15px;top: 0;bottom: 0;margin: auto;display: none;">X</span></a>
+            <a href="#<%= post %>" class="list-group-item" post style="position: relative;"><%= post %><span class="delete" style="position: absolute;height: 30px; width: 30px;right: 15px;top: 0;bottom: 0;margin: auto;display: none;color: #000000;">X</span></a>
         <% }); %>
     </div>
 </div>
@@ -197,7 +197,7 @@
         let aList = document.querySelectorAll('.list-group-item');
         if (!val) {
             aList.forEach( aEl => {
-                aEl.style.display = 'inline-block';
+                aEl.style.display = 'block';
             })
         } else {
             aList.forEach( aEl => {
