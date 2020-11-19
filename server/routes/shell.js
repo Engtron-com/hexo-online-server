@@ -340,7 +340,7 @@ function upload_file(file) {
     var my_file = file.path;
   
     let oldName = file1_path + file.originalname;
-    let newName = newDate().getTime() +'_'+ file.originalname;
+    let newName = new Date().getTime() +'_'+ file.originalname;
     base_fs.renameSync(oldName, file1_path + newName); //修改图片默认地址
     
     if (!base_fs.existsSync(file1_path)) {
