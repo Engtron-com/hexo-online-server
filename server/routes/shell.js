@@ -333,7 +333,7 @@ function rename_page(old_name, new_name) {
     })
 }
 function upload_file(file, name) {
-	consolo.log(name);
+	console.log(name);
     var file_name = info.name.replace("#", "").replace("%23", "")
     var file1_path = path.join(file.destination, info.type)
     var file2_path = path.join(file1_path, file_name)
@@ -378,25 +378,4 @@ function upload_file(file, name) {
         'massage': '上传成功'
     }
 }
-function uploadUser_ImgPre(req, res, next) {
-    //生成multiparty对象，并配置上传目标路径
-    var form = new multiparty.Form({uploadDir: './public/files/images', encoding : 'utf-8'});
-    form.parse(req, function(err, fields, files) {
-      var filesTmp = JSON.stringify(files);
-      if(err){
-        return {
-            'success':0,
-            'massage': '上传失败'
-        }
-      } else {
-        testJson = eval("(" + filesTmp+ ")"); 
-        console.log(testJson.fileField[0].path);
-        return { 
-            'success': 1,
-            'massage': '上传成功',
-            'url': testJson.fileField[0].path 
-        }
-      }
-    });
-  }
 module.exports = router;
