@@ -159,18 +159,17 @@
                 },
                 type: 'get',
                 success : function(res) {
-                    $(currentEl).text(res.new_name);
-                    alert(res.new_name)
+                    $(currentEl).text(val);
                     $.ajax({
                         url: '/shell?action=save_post',
                         data: {
-                            post: res.new_name,
+                            post: val,
                             data: $(".editormd-markdown-textarea").val()
                         },
                         type: 'post',
                         dataType: 'json',
                         success: function (res) {
-                          
+                            swal("保存成功", "success");
                         }
                     })
                 }
