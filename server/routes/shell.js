@@ -338,12 +338,10 @@ function upload_file(file) {
     var file2_path = path.join(file1_path, file_name)
     var img_path = path.join(file2_path, file.originalname)
     var my_file = file.path;
-    let newName = file.originalname;
   
-    let oldName = file1_path + newName;
-    let newName = newDate().getTime() + file.originalname;
-
-    base_fs.renameSync(oldName, file1_path + newName);
+    let oldName = file1_path + file.originalname;
+    let newName = newDate().getTime() +'_'+ file.originalname;
+    base_fs.renameSync(oldName, file1_path + newName); //修改图片默认地址
     
     if (!base_fs.existsSync(file1_path)) {
         try {
