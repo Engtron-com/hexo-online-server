@@ -1558,11 +1558,8 @@
             margin: auto;
             width: 14%;
             height: 16%;
-            background: #fff;
         }
-        .form-horizontal {
-            width: 100%;
-        }
+     
         .form-group input {
             background: #000000;
             border: none;
@@ -1572,6 +1569,7 @@
         .form-group button, .form-group button:hover {
             background-color: #fad46b;
             color: #ffffff;
+            width: 100%;
         }
 
         .form-control:focus {
@@ -1584,6 +1582,13 @@
             color: #ffff;
             text-align: center;
             font-size: 17px;
+        }
+
+        input:-internal-autofill-selected {
+            appearance: unset;
+            background-color:  #000000 !important;
+            background-image: none !important;
+            color: -internal-light-dark(black, white) !important;
         }
     </style>
 </head>
