@@ -4,7 +4,7 @@ var fs = require("fs");
 var path = require("path");
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/post?pjax=true', function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
         fs.readdir(path.join(hexo.source_dir, '_posts'), function (err, files) {
             if (err) {
