@@ -43,11 +43,7 @@ function uploadImg(file, Editor, isState){
     $.ajax({
         type : 'post',
         url : Editor.settings.imageUploadURL,
-        data: {
-            name: 'editormd-image-file',
-            value: file,
-            fileState: isState
-        },
+        data: formData,
         processData:false,
         async:false,
         cache: false,  
