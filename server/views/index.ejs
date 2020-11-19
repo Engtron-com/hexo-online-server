@@ -10,7 +10,6 @@
   <script>
     getPageParams('/post');
     function getPageParams(href) {
-      console.log('1')
       $.get(href, {
         pjax: true
       }, function (data, status, xhr) {
@@ -82,8 +81,11 @@
       float: right;
     }
     .navbar-nav a:hover {
-      background: none;
-      color: #333333;
+      color: #777777;
+    }
+
+    .list-group-item:hover span {
+      display: inline-block;
     }
   </style>
 </head>
