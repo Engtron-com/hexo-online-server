@@ -10,7 +10,6 @@ var os = require('os');
 var base_fs = require('fs')
 var multer = require('multer')
 var config = require('../../lib/getConfig');
-var multiparty = require('multiparty');
 
 var upload = multer({ dest: path.join(hexo.source_dir, '/img') })
 
