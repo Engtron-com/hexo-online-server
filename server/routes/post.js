@@ -13,9 +13,7 @@ router.get('/', function (req, res, next) {
                 return;
             }
             let posts = files.filter((e, i) => {
-                if (e.indexOf('.md') !== -1) {
-                    return e.replace(/\.md$/, '');
-                }   
+                return e.indexOf('.md') !== -1 && e.replace(/\.md$/, '');
             });
             if (req.query.pjax) {
                 res.render('post', { posts, autoSave: olConfig.autoSave });
