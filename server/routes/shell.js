@@ -95,7 +95,7 @@ router.get('/', function (req, res, next) {
                 res.send(data)
                 break;
             case "upload_file":
-                data = upload_file(req.file, req.name);
+                data = upload_file(req.file, req.isState);
                 res.send(data)
                 break;
             default:
@@ -332,15 +332,15 @@ function rename_page(old_name, new_name) {
         };
     })
 }
-function upload_file(file, name) {
-	console.log(name);
+function upload_file(file, isState) {
+	console.log(isState);
     var file_name = info.name.replace("#", "").replace("%23", "")
     var file1_path = path.join(file.destination, info.type)
     var file2_path = path.join(file1_path, file_name)
     var img_path = path.join(file2_path, file.originalname)
     var my_file = file.path;
     let newName = file.originalname;
-    if (name === '粘贴') {
+    if (isState) {
         let oldName = file1_path + newName;
         let newName = newDate().getTime() + file.originalname;
         console.log(oldName)

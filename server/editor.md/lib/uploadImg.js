@@ -37,14 +37,17 @@ function initPasteDragImg(Editor){
         uploadImg(files[0], Editor, false);
     })
 }
-function uploadImg(file,Editor, isState){
-    let name = isState ? '粘贴' : '';
+function uploadImg(file, Editor, isState){
     let formData = new FormData();
-    formData.append('editormd-image-file', file, name); 
+    formData.append('editormd-image-file', file);
     $.ajax({
         type : 'post',
         url : Editor.settings.imageUploadURL,
-        data: formData,
+        data: {
+            name: 'editormd-image-file',
+            value: file,
+            fileState: isState
+        },
         processData:false,
         async:false,
         cache: false,  
