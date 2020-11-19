@@ -2,20 +2,20 @@
 <script src="/editormd.min.js"></script>
 <script src="/hintDialog.js"></script>
 <script src="/lib/dateFormat.js"></script>
-<div style="width: 20%;position: fixed;top:51px;bottom: 0;background: #333333; border: 1px solid #333333;box-shadow: 0 0 6px rgba(0,0,0,0.25);transition: background-color 500ms ease;">
-    <div style="width: 100%;height: 38px;">
-        <input type="text" id="search" style="width: 60%;outline: none;height: 38px;border-radius: 15px; border: 1px solid #f3f3f3;background: #ffffff;color: #4d4d4d;margin-top: 4px;" placeholder="搜索" />
-        <a name="new" href="/shell?action=new_post" style="width: 20%;padding: 6px 20px;margin: 6px 15px;" wss type="button" class="btn btn-default">新建</a>
-        <!-- <a name="delete" href="/shell?action=delete_post" wss type="button" class="btn btn-default" post-id="#">删除</a> -->
-    </div>
-    <div style="width: 100%;height: 94%;overflow-x: hidden;overflow-y: scroll;background: #ffffff;">
+<div style="width: 20%;position: fixed;top:51px;bottom: 0;border: 1px solid #333333;height: 94%;">
+    <div style="width: 100%;height: 95%;overflow-x: hidden;overflow-y: scroll;background: #ffffff;">
         <% posts.forEach(function(post){ %>
             <a href="#<%= post %>" class="list-group-item" post style="position: relative;"><%= post %><span class="delete" style="position: absolute;height: 30px; width: 30px;right: 15px;top: 0;bottom: 0;margin: auto;display: none;"></span></a>
         <% }); %>
     </div>
+    <div style="width: 100%;height: 5%;padding-top: 4px;display: flex; justify-content: center;">
+        <!-- <input type="text" id="search" style="width: 60%;outline: none;height: 38px;border-radius: 15px; border: 1px solid #f3f3f3;background: #ffffff;color: #4d4d4d;margin-top: 4px;" placeholder="搜索" /> -->
+        <a name="new" href="/shell?action=new_post" style="padding: 6px 20px;margin: 6px 15px;" wss type="button" class="btn btn-default">新建</a>
+        <a name="delete" href="/shell?action=delete_post" wss type="button" style="padding: 6px 20px;margin: 6px 15px;" class="btn btn-default" post-id="#">删除</a>
+    </div>
 </div>
 <div class="btn-group" style="position: fixed;margin-left: 20%;width: 80%;top: 52px;height: 94%;"> 
-    <div class="el-form-item__content" style="width:100%;height:5%;background-color: #dddddd;">
+    <div class="el-form-item__content" style="width:100%;height:5%;background-color: #dddddd;padding-top: 4px;">
         <div class="input__title flex1 el-input" style="width: 86%;height: 38px; float: left;">
             <input type="text" style=" width: 100%;outline: none; height: 38px;border: 1px solid #f3f3f3;background: #ffffff;color: #4d4d4d;" autocomplete="off" id="txtTitle" post-id="#" maxlength="100" placeholder="2020-11-18" class="el-input__inner"/>
             <!-- <span class="el-input__suffix"><span class="el-input__suffix-inner">
@@ -83,16 +83,17 @@
         let href=$(this).attr("href");
         switch ($(this).attr("name")) {
             case "new":
-                // var val = prompt("请输入文章标题：")
-                // var c = function (val, ev) {
+                var val = prompt("请输入文章标题：")
+                var c = function (val, ev) {
                     ev.preventDefault();
-                    //if (val) {
+                    alert(dateFormat('YYYY-MM-DD'))
+                    if (val) {
                         $.get(href, {
-                            post: dateFormat('YYYY-MM-DD')
+                            post: val
                         });
-                    //}
-                // };
-                // c(val, e)
+                    }
+                };
+                c(val, e)
                 break;
             case "delete":
                 let that = this;
