@@ -95,7 +95,7 @@ router.get('/', function (req, res, next) {
                 res.send(data)
                 break;
             case "upload_file":
-                data = upload_file(req.file);
+                data = upload_file(req.file, req.name);
                 res.send(data)
                 break;
             default:
@@ -332,12 +332,21 @@ function rename_page(old_name, new_name) {
         };
     })
 }
-function upload_file(file) {
+function upload_file(file, name) {
+	consolo.log(name);
     var file_name = info.name.replace("#", "").replace("%23", "")
     var file1_path = path.join(file.destination, info.type)
     var file2_path = path.join(file1_path, file_name)
     var img_path = path.join(file2_path, file.originalname)
-    var my_file = file.path
+    var my_file = file.path;
+    let newName = file.originalname;
+    if (name === '粘贴') {
+        let oldName = file1_path + newName;
+        let newName = newDate().getTime() + file.originalname;
+        console.log(oldName)
+        console.log(file_path + newName)
+        base_fs.renameSync(oldName, file1_path + newName);
+    }
     if (!base_fs.existsSync(file1_path)) {
         try {
             base_fs.mkdirSync(file1_path)
@@ -358,13 +367,13 @@ function upload_file(file) {
     }
     catch (err) {
         return {
-            'url': '/img/' + info.type + '/' + file_name + '/' + file.originalname,
+            'url': '/img/' + info.type + '/' + file_name + '/' + newName,
             'success': 1,
             'massage': err
         }
     }
     return {
-        'url': '/img/' + info.type + '/' + file_name + '/' + file.originalname,
+        'url': '/img/' + info.type + '/' + file_name + '/' + newName,
         'success': 1,
         'massage': '上传成功'
     }

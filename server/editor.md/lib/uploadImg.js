@@ -19,7 +19,7 @@ function initPasteDragImg(Editor){
             console.log("粘贴内容非图片");
             return;
         }
-        uploadImg(file,Editor);
+        uploadImg(file, Editor, true);
     });
     var dashboard = document.getElementById(Editor.id)
     dashboard.addEventListener("dragover", function (e) {
@@ -34,39 +34,13 @@ function initPasteDragImg(Editor){
         e.preventDefault()
         e.stopPropagation()
      var files = this.files || e.dataTransfer.files;
-        uploadImg(files[0],Editor);
+        uploadImg(files[0], Editor, false);
     })
 }
-function uploadImg(file,Editor){
+function uploadImg(file,Editor, isState){
+    let name = isState ? '粘贴' : '';
     let formData = new FormData();
-    formData.append('editormd-image-file', file); 
-    // $.ajax({
-    // 	"type": 'post',  
-    //     "url": Editor.settings.imageUploadURL,//获取我们配置的url
-    //     "data": formData,
-    //     "dateType": "json",
-    //     "processData": false,
-    //     "contentType": false,
-    //     "mimeType": "multipart/form-data",
-    //     success: function(ret){
-    //     	var json = $.parseJSON(ret);
-    //     	if(json.success){
-    //     		var url = json.body;
-    //     		var type = json.type; 
-    //     		if(/(png|jpg|jpeg|gif|bmp|ico|image)/.test(type)){
-    //                 Editor.insertValue("![图片alt]("+url+")");
-    //             }else{
-    //                 Editor.insertValue("[下载附件]("+url+")");
-    //             }    
-    //     	}else{
-    //     		alert("上传失败");
-    //     	}
-              
-    //     },
-    //     error: function (err){
-    //         console.log('请求失败')
-    //     } 
-    // });
+    formData.append('editormd-image-file', file, name); 
     $.ajax({
         type : 'post',
         url : Editor.settings.imageUploadURL,
