@@ -199,7 +199,7 @@ function new_post(e) {
         e: "hexo new " + e, next: () => {
             let checkExists = setTimeout(() => {
                 if (fs.existsSync(path.join(hexo.source_dir, '_posts/', e + ".md"))) {
-                    clearInterval(checkExists);
+                    clearTimeout(checkExists);
                     send("新建《" + e + "》文章成功","success");
                     send("", "reload");
                 }
@@ -256,7 +256,7 @@ function new_page(e) {
         e: "hexo new page " + e, next: () => {
             let checkExists = setTimeout(() => {
                 if (fs.existsSync(path.join(hexo.source_dir, e, "index.md"))) {
-                    clearInterval(checkExists);
+                    clearTimeout(checkExists);
                     send("新建\"" + e + "\"页面成功","success");
                     send("", "reload");
                 }
