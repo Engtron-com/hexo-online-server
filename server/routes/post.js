@@ -14,6 +14,7 @@ router.get('/', function (req, res, next) {
             }
             let posts = [];
             files.map((e, i) => {
+                console.log(e)
                 if (e.indexOf('.md') !== -1) {
                     posts.push(e.replace(/\.md$/, ''));
                 }
