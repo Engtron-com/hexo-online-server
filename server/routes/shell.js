@@ -10,7 +10,6 @@ var os = require('os');
 var base_fs = require('fs')
 var multer = require('multer')
 var config = require('../../lib/getConfig');
-const { send } = require('server/reply');
 
 var upload = multer({ dest: path.join(hexo.source_dir, '/img') })
 
@@ -19,6 +18,7 @@ var info = {}
 /* GET home page. */
 router.get('/', function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
+        let data = null;
         switch (req.query.action) {
             case "pull":
                 gitPull();
@@ -60,18 +60,18 @@ router.get('/', function (req, res, next) {
                 delete_post(req.query.post);
                 break;
             case "rename_post":
-                let data = rename_post(req.query.old_name, req.query.new_name);
+                data = rename_post(req.query.old_name, req.query.new_name);
                 res.send(data);
                 break
             case "new_page":
                 new_page(req.query.page);
                 break;
             case "delete_page":
-                var data = delete_page(req.query.page, res);
+                data = delete_page(req.query.page, res);
                 res.send(data)
                 break;
             case "rename_page":
-                var data = rename_page(req.query.old_name, req.query.new_name);
+                data = rename_page(req.query.old_name, req.query.new_name);
                 res.send(data);
                 break
             default:
@@ -84,17 +84,18 @@ router.get('/', function (req, res, next) {
     }
 }).post('/', upload.single('editormd-image-file'), function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
+        let data = null;
         switch (req.query.action) {
             case "save_post":
-                var data = save_post(req.body.post, req.body.data);
+                data = save_post(req.body.post, req.body.data);
                 res.send(data)
                 break;
             case "save_page":
-                var data = save_page(req.body.page, req.body.data);
+                data = save_page(req.body.page, req.body.data);
                 res.send(data)
                 break;
             case "upload_file":
-                var data = upload_file(req.file);
+                data = upload_file(req.file);
                 res.send(data)
                 break
             default:
