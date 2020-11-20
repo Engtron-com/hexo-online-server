@@ -48,38 +48,8 @@
         $(txtTitle).attr('placeholder', title);
     });
     $(".list-group-item")[0] &&  $(".list-group-item")[0].click();
-    $("a[post]").bind("click", function () {
-        let postId = $(this).attr("href");
-        $.get('/getPost', {
-            post: postId
-        }, function (data, status, xhr) {
-            if (status === "success" && data.success) {
-                let editor = editormd("editor", {
-                    width: "100%",
-                    height: "95%",
-                    markdown: data.data, // dynamic set Markdown text
-                    path: "/lib/" // Autoload modules mode, codemirror, marked... dependents libs path
-                });
-                $('a[post-id]').attr("post-id", postId);
-                let autoSaveTime = <%= autoSave %> ;
-                if (autoSaveTime) {
-                    if (window.autoSave) clearInterval(window.autoSave);
-                    window.autoSave = setInterval(() => {
-                        $.post($('a[name="save"]').attr("href"), {
-                            post: $('a[name="save"]').attr("post-id"),
-                            data: $(".editormd-markdown-textarea").val()
-                        });
-                    }, autoSaveTime);
-                }
-                initPasteDragImg(editor);
-            } else {
-                swal("\n获取文章失败", "error");
-            }
-        });
-        $.get('/shell?action=get_postname',{
-            post: postId
-        });
-    });
+    $("a[post]").bind("click", getPost);
+
     $("a[post]")[0] && $("a[post]")[0].click();
     $("a[wss]").bind("click", function (e) {
         let href=$(this).attr("href");
@@ -93,8 +63,15 @@
                         $.get(href, {
                             post: name +''
                         }, function (data, status) {
-                            if (status === "success") {  
-                               $('#blog-group').append('<a href="#'+name+'" class="list-group-item" post style="position: relative;">'+name+'</a>')
+                            if (status === "success") {
+                                let a = document.createElement('a');
+                                a.href =  "#" +name;
+                                a.class = "list-group-item";
+                                a.setAttribute('post', '');
+                                a.style = "position: relative";
+                                a.innerText = name;
+                               $('#blog-group').append(a);
+                               $(a).bind('click', getPost);
                             }
                         });
                     }
@@ -215,6 +192,39 @@
             })
         }
     }, 1500));
+
+    function getPost() {
+        let postId = $(this).attr("href");
+        $.get('/getPost', {
+            post: postId
+        }, function (data, status, xhr) {
+            if (status === "success" && data.success) {
+                let editor = editormd("editor", {
+                    width: "100%",
+                    height: "95%",
+                    markdown: data.data, // dynamic set Markdown text
+                    path: "/lib/" // Autoload modules mode, codemirror, marked... dependents libs path
+                });
+                $('a[post-id]').attr("post-id", postId);
+                let autoSaveTime = <%= autoSave %> ;
+                if (autoSaveTime) {
+                    if (window.autoSave) clearInterval(window.autoSave);
+                    window.autoSave = setInterval(() => {
+                        $.post($('a[name="save"]').attr("href"), {
+                            post: $('a[name="save"]').attr("post-id"),
+                            data: $(".editormd-markdown-textarea").val()
+                        });
+                    }, autoSaveTime);
+                }
+                initPasteDragImg(editor);
+            } else {
+                swal("\n获取文章失败", "error");
+            }
+        });
+        $.get('/shell?action=get_postname',{
+            post: postId
+        });
+    }
 
     function throttle(fun, delay) {
         let time = null;

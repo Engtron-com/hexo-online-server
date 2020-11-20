@@ -35,6 +35,7 @@ var postRouter = require('./routes/post');
 var getPostRouter = require('./routes/getPost');
 var pageRouter = require('./routes/page');
 var getPageRouter = require('./routes/getPage');
+var getImgSrc = require('./routes/getImgSrc');
 
 app.use(indexPath, indexRouter);
 app.use(indexPath + 'login', loginRouter);
@@ -45,10 +46,16 @@ app.use(indexPath + 'post', postRouter);
 app.use(indexPath + 'getPost', getPostRouter);
 app.use(indexPath + 'page', pageRouter);
 app.use(indexPath + 'getPage', getPageRouter);
+app.use(indexPath + 'img', getImgSrc);
 
 app.use(function (req, res, next) {
   next(createError(404));
 });
+
+// app.get('', function (req, res) {
+//   res.sendFile( __dirname + "/" + req.url);
+//   console.log("Request for " + req.url + " received.");
+// })
 
 app.use(function (err, req, res, next) {
   res.locals.message = err.message;

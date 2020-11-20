@@ -23,7 +23,10 @@ hexo.extend.console.register('online', 'Start online server', function (args) {
             key: privateKey,
             cert: privateCrt
         };
-        var wssApp = https.createServer(HTTPS_OPTOIN, (req, res) => { res.writeHead(200); res.end(); }).listen(olConfig.wsPort);
+        var wssApp = https.createServer(HTTPS_OPTOIN, (req, res) => { 
+            res.writeHead(200); res.end(); 
+        
+        }).listen(olConfig.wsPort);
         wssOption = { server: wssApp };
     }
 
