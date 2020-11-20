@@ -6,7 +6,7 @@
 <div style="width: 20%;position: fixed;top:51px;bottom: 0;border-right: 1px solid #333333;height: 94%;">
     <div id="blog-group" style="width: 100%;height: 95%;overflow-x: hidden;max-height: 95%;overflow-y: auto;background: #ffffff;">
         <% posts.forEach(function(post){ %>
-            <a href="#<%= post %>" class="list-group-item" post style="position: relative;"><%= post %></a>
+            <a href="javascript:void(0)" data-href="#<%= post %>" class="list-group-item" post style="position: relative;"><%= post %></a>
         <% }); %>
     </div>
     <div style="width: 100%;height: 5%;padding-top: 4px;display: flex; justify-content: center;padding: 0;">
@@ -52,38 +52,22 @@
 
     $("a[post]")[0] && $("a[post]")[0].click();
     $("a[wss]").bind("click", function (e) {
-        let href=$(this).attr("href");
+        let href=$(this).attr("data-href");
         switch ($(this).attr("name")) {
             case "new":
                 // var val = prompt("请输入文章标题：")
                 // var c = function (val, ev) {
                     ev.preventDefault();
                     let name = dateFormat('YYYY-MM-DD HH:mm:ss');
+                    console.log(name)
                     //if (val) {
-                    $.ajax({
-                        url: '/shell?action=new_post',
-                        data: {
-                            post: name
-                        },
-                        type: 'get',
-                        success : function (data, status) {
-                            if (status === "success") {
-                                let a = document.createElement('a');
-                                a.href =  "#" +name;
-                                a.className = "list-group-item";
-                                a.setAttribute('post', '');
-                                a.style = "position: relative";
-                                a.innerText = name;
-                                $('#blog-group').append(a);
-                                $(a).bind('click', getPost);
-                            }
+                    $.get(href, {
+                        post: name
+                    }, function (data, status) {
+                        if (status === "success") {
+                            addItem(name);
                         }
                     });
-                        // $.get(href, {
-                        //     post: name
-                        // }, function (data, status) {
-                            
-                        // });
                 //     }
                 // };
                 // c(val, e)
@@ -202,6 +186,18 @@
         $.get('/shell?action=get_postname',{
             post: postId
         });
+    }
+
+    function addItem(name) {
+        let a = document.createElement('a');
+        a.href = "javascript:void(0)";
+        a.className = "list-group-item";
+        a.setAttribute('data-href', '#' + name);
+        a.setAttribute('post', '');
+        a.style = "position: relative";
+        a.innerText = name;
+        $('#blog-group').append(a);
+        $(a).bind('click', getPost);
     }
 
     function throttle(fun, delay) {
