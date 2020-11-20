@@ -11,8 +11,8 @@
     </div>
     <div style="width: 100%;height: 5%;padding-top: 4px;display: flex; justify-content: center;padding: 0;">
         <!-- <input type="text" id="search" style="width: 60%;outline: none;height: 38px;border-radius: 15px; border: 1px solid #f3f3f3;background: #ffffff;color: #4d4d4d;margin-top: 4px;" placeholder="搜索" /> -->
-        <a name="new" href="/shell?action=new_page" style="padding: 12px 20px;flex: 6;" wss type="button" class="btn btn-default">新增</a>
-        <a name="delete" href="/shell?action=delete_page" wss type="button" style="padding: 12px 20px;flex: 6;" class="btn btn-default" page-id="#">删除</a>
+        <a name="new" href="javascript:void(0)" data-href="/shell?action=new_page" style="padding: 12px 20px;flex: 6;" wss type="button" class="btn btn-default">新增</a>
+        <a name="delete" href="javascript:void(0)" data-href="/shell?action=delete_page" wss type="button" style="padding: 12px 20px;flex: 6;" class="btn btn-default" page-id="#">删除</a>
     </div>
 </div>
 <div class="btn-group" style="position: fixed;margin-left: 20%;width: 80%;top: 52px;height: 94%;"> 
@@ -51,14 +51,9 @@
     $("a[page]").bind("click", getPage);
     $("a[page]")[0] && $("a[page]")[0].click();
     $("a[wss]").bind("click", function () {
-        let href=$(this).attr("href");
+        let href = $(this).attr("data-href");
         switch ($(this).attr("name")) {
-            case "new":
-                // alertify
-                //     .okBtn("确定")
-                //     .cancelBtn("取消")
-                //     .prompt("请输入页面名称：",
-                //         function (val, ev) {              
+            case "new":            
                 ev.preventDefault();
                 let name = dateFormat('YYYY-MM-DD HH:mm:ss');
                 $.get(href, {
@@ -68,7 +63,6 @@
                         addItem(name);
                     }
                 });
-                //});
                 break;
             case "delete":
                 let that = this;
