@@ -39,14 +39,8 @@
     </div>
 </div>
 <script>
-    $(".list-group-item").bind("click", function (e) {
-        $(".list-group-item").removeClass("active");
-        $(this).addClass("active");
-        let titleEl = document.getElementById('txtTitle');
-        let title = e.target.innerText || '#';
-        $(titleEl).attr('post-id', title);
-        $(txtTitle).attr('placeholder', title);
-    });
+    
+    $(".list-group-item").bind("click", toggleStyle);
     $(".list-group-item")[0] &&  $(".list-group-item")[0].click();
     $("a[post]").bind("click", getPost);
 
@@ -191,6 +185,16 @@
         a.innerText = name;
         $('#blog-group').append(a);
         $(a).bind('click', getPost);
+        $(a).bind('click', toggleStyle);
+    }
+
+    function toggleStyle(e) {
+        $(".list-group-item").removeClass("active");
+        $(this).addClass("active");
+        let titleEl = document.getElementById('txtTitle');
+        let title = e.target.innerText || '#';
+        $(titleEl).attr('page-id', title);
+        $(txtTitle).attr('placeholder', title);
     }
 
     function throttle(fun, delay) {
