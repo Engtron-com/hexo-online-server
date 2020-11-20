@@ -51,10 +51,10 @@
     $("a[page]").bind("click", getPage);
     $("a[page]")[0] && $("a[page]")[0].click();
     $("a[wss]").bind("click", function () {
+        e.preventDefault();
         let href = $(this).attr("data-href");
         switch ($(this).attr("name")) {
-            case "new":            
-                ev.preventDefault();
+            case "new":
                 let name = dateFormat('YYYY-MM-DD HH:mm:ss');
                 $.get(href, {
                     page: name

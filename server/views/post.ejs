@@ -52,10 +52,10 @@
 
     $("a[post]")[0] && $("a[post]")[0].click();
     $("a[wss]").bind("click", function (e) {
+        e.preventDefault();
         let href = $(this).attr("data-href");
         switch ($(this).attr("name")) {
             case "new":
-                ev.preventDefault();
                 let name = dateFormat('YYYY-MM-DD HH:mm:ss');
                 $.get(href, {
                     post: name
