@@ -17,6 +17,7 @@ var info = {}
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
+    console.log('shell');
     if (req.session.user === olConfig.user && req.session.isLogin) {
         let data = null;
         switch (req.query.action) {

@@ -5,6 +5,7 @@ var path = require("path");
 
 /* GET img. */
 router.get('/', function (req, res, next) {
+    console.log('getImgSrc')
     if (req.session.user === olConfig.user && req.session.isLogin) {
         console.log(req);
         let dirName = req.query.page;
