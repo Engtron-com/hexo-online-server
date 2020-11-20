@@ -3,7 +3,7 @@
 <script src="/js/hintDialog.js"></script>
 <script src="/js/dateFormat.js"></script>
 <script src="/js/uploadImg.js"></script>
-<div style="width: 20%;position: fixed;top:51px;bottom: 0;border-right: 1px solid #333333;height: 94%;">
+<div style="width: 20%;position: fixed;top:51px;bottom: 0;border-right: 1px solid #333333;height: 95%;">
     <div id="blog-group" style="width: 100%;height: 95%;overflow-x: hidden;max-height: 95%;overflow-y: auto;background: #ffffff;">
         <% pages.forEach(function(page){ %>
             <a href="javascript:void(0)" data-href="#<%= post %>" class="list-group-item" page style="position: relative;"><%= page %></a>
@@ -15,10 +15,10 @@
         <a name="delete" href="javascript:void(0)" data-href="/shell?action=delete_page" wss type="button" style="padding: 12px 20px;flex: 6;" class="btn btn-default" page-id="#">删除</a>
     </div>
 </div>
-<div class="btn-group" style="position: fixed;margin-left: 20%;width: 80%;top: 52px;height: 94%;"> 
+<div class="btn-group" style="position: fixed;margin-left: 20%;width: 80%;top: 52px;height: 95%;"> 
     <div class="el-form-item__content" style="width:100%;height:5%;background-color: #dddddd;padding-top: 4px;margin-left: 10px;">
         <div class="input__title flex1 el-input" style="width: 86%;height: 38px; float: left;">
-            <input type="text" style=" width: 100%;outline: none; height: 38px;border: 1px solid #f3f3f3;padding:0 10px; background: #ffffff;color: #4d4d4d;" autocomplete="off" id="txtTitle" page-id="#" maxlength="100" placeholder="2020-11-18" class="el-input__inner"/>
+            博客管理：<input type="text" style=" width: 94.5%;outline: none; height: 38px;border: 1px solid #f3f3f3;padding:0 10px; background: #ffffff;color: #4d4d4d;" autocomplete="off" id="txtTitle" page-id="#" maxlength="100" placeholder="2020-11-18" class="el-input__inner"/>
             <!-- <span class="el-input__suffix"><span class="el-input__suffix-inner">
             <span class="el-input__count"><span class="el-input__count-inner">10/100</span></span></span>
             </span> -->
@@ -55,7 +55,7 @@
         let href = $(this).attr("data-href");
         switch ($(this).attr("name")) {
             case "new":
-                let name = dateFormat('YYYY-MM-DD HH:mm:ss');
+                let name = 'blog-' + dateFormat('mm-ss');
                 $.get(href, {
                     page: name
                 }, function (data, status) {
