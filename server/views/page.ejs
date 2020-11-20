@@ -1,6 +1,8 @@
 <link rel="stylesheet" href="/css/editormd.min.css" />
 <script src="/editormd.min.js"></script>
-<script src="../../lib/dateFormat.js"></script>
+<script src="/hintDialog.js"></script>
+<script src="/lib/dateFormat.js"></script>
+<script src="/lib/uploadImg.js"></script>
 <div style="width: 20%;position: fixed;top:51px;bottom: 0;border-right: 1px solid #333333;height: 94%;">
     <div id="blog-group" style="width: 100%;height: 95%;overflow-x: hidden;max-height: 95%;overflow-y: auto;background: #ffffff;">
         <% pages.forEach(function(page){ %>
@@ -9,8 +11,8 @@
     </div>
     <div style="width: 100%;height: 5%;padding-top: 4px;display: flex; justify-content: center;padding: 0;">
         <!-- <input type="text" id="search" style="width: 60%;outline: none;height: 38px;border-radius: 15px; border: 1px solid #f3f3f3;background: #ffffff;color: #4d4d4d;margin-top: 4px;" placeholder="搜索" /> -->
-        <a name="new" href="/shell?action=new_page" style="padding: 6px 20px;margin: 6px 15px;" wss type="button" class="btn btn-default">新增</a>
-        <a name="delete" href="/shell?action=delete_page" wss type="button" style="padding: 6px 20px;margin: 6px 15px;" class="btn btn-default" page-id="#">删除</a>
+        <a name="new" href="/shell?action=new_page" style="padding: 12px 20px;flex: 6;" wss type="button" class="btn btn-default">新增</a>
+        <a name="delete" href="/shell?action=delete_page" wss type="button" style="padding: 12px 20px;flex: 6;" class="btn btn-default" page-id="#">删除</a>
     </div>
 </div>
 <div class="btn-group" style="position: fixed;margin-left: 20%;width: 80%;top: 52px;height: 94%;"> 
@@ -36,102 +38,4 @@
     <div id="editor" style="width: 100%;height:95%;">
     </div>
 </div>
-<script>
-    $(".list-group-item").bind("click", function () {
-        $(".list-group-item").removeClass("active");
-        $(this).addClass("active");
-        let titleEl = document.getElementById('txtTitle');
-        let title = e.target.innerText || '#';
-        $(titleEl).attr('page-id', title);
-        $(txtTitle).attr('placeholder', title);
-    });
-    $("a[page]").bind("click", function () {
-        let pageId = $(this).attr("href");
-        $.get('/getPage', {
-            page: pageId
-        }, function (data, status, xhr) {
-            if (status === "success" && data.success) {
-                var editor = editormd("editor", {
-                    width: "100%",
-                    height: "95%",
-                    markdown: data.data, // dynamic set Markdown text
-                    path: "/lib/" // Autoload modules mode, codemirror, marked... dependents libs path
-                });
-                $('a[page-id]').attr("page-id", pageId);
-                let autoSaveTime = <%= autoSave %> ;
-                if (autoSaveTime) {
-                    if (window.autoSave) clearInterval(window.autoSave);
-                    window.autoSave = setInterval(() => {
-                        $.post($('a[name="save"]').attr("href"), {
-                            page: $('a[name="save"]').attr("page-id"),
-                            data: $(".editormd-markdown-textarea").val()
-                        });
-                    }, autoSaveTime);
-                }
-            } else {
-                swal("\n获取页面失败", "error");
-            }
-        });
-    });
-    $("a[wss]").bind("click", function () {
-        let href=$(this).attr("href");
-        switch ($(this).attr("name")) {
-            case "new":
-                alertify
-                    .okBtn("确定")
-                    .cancelBtn("取消")
-                    .prompt("请输入页面路径：",
-                        function (val, ev) {
-                            ev.preventDefault();
-                            if (val) $.get(href, {
-                                page:val
-                            });
-                        });
-                break;
-            case "delete":
-                $.get(href, {
-                    page: $(this).attr("page-id")
-                });
-                break;
-            case "save":
-                $.post(href, {
-                    page: $(this).attr("page-id"),
-                    data: $(".editormd-markdown-textarea").val()
-                });
-                break;
-            default:
-                swal("未知操作", "error");
-                break;
-        }
-        return false;
-    });
-    $(".btn-save").click(function () {
-        let currentEl = $(".list-group-item.active");
-        let titleEl = $('#txtTitle');
-        let old_name = $(titleEl).attr('page-id');
-        let val = $(titleEl).val();
-        if (val && old_name !== val) {
-            $.ajax({
-                url: '/shell?action=rename_page',
-                data: {
-                    old_name: old_name,
-                    new_name: val
-                },
-                type: 'get',
-                success : function(res) {
-                    $(currentEl).text(val);
-                    $.post(href, {
-                        page: val,
-                        data: $(".editormd-markdown-textarea").val()
-                    });
-                }
-            })
-        } else {
-            $.post(href, {
-                page:  $(currentEl).text(),
-                data: $(".editormd-markdown-textarea").val()
-            });
-        }
-    });
-   
-</script>
+<script src="/js/page.js"></script>

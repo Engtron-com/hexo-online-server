@@ -201,7 +201,7 @@ function new_post(e) {
                 if (fs.existsSync(path.join(hexo.source_dir, '_posts/', e + ".md"))) {
                     clearTimeout(checkExists);
                     send("新建《" + e + "》文章成功","success");
-                    send("", "reload");
+                    //send("", "reload");
                 }
             }, 100);
         }
@@ -215,7 +215,7 @@ function delete_post(e) {
             return console.error(err);
         }
         send("删除《" + postName + "》文章成功","success");
-        send("", "reload");
+        //send("", "reload");
     });
 }
 function save_post(id, data) {
@@ -258,7 +258,7 @@ function new_page(e) {
                 if (fs.existsSync(path.join(hexo.source_dir, e, "index.md"))) {
                     clearTimeout(checkExists);
                     send("新建\"" + e + "\"页面成功","success");
-                    send("", "reload");
+                    //send("", "reload");
                 }
             }, 1000);
         }
