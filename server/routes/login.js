@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcryptjs');
 var axios = require('axios');
-var dateFormat = require("/js/dateFormat");
+var dateFormat = require("../../lib/dateFormat");
 
 /* GET home page. */
 router.post('/', function (req, res, next) {
