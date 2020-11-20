@@ -17,6 +17,7 @@ router.get('/', function (req, res, next) {
             return;
         }
         res.write(data, 'binary');
+        res.end();
     });
 });
 module.exports = router;
