@@ -59,7 +59,7 @@
                 // var c = function (val, ev) {
                     ev.preventDefault();
                     let name = dateFormat('YYYY-MM-DD HH:mm:ss');
-                    console.log(name)
+                    console.log(name);
                     //if (val) {
                     $.get(href, {
                         post: name
@@ -156,7 +156,7 @@
     }, 1500));
 
     function getPost() {
-        let postId = $(this).attr("href");
+        let postId = $(this).attr("data-href");
         $.get('/getPost', {
             post: postId
         }, function (data, status, xhr) {
@@ -172,8 +172,8 @@
                 if (autoSaveTime) {
                     if (window.autoSave) clearInterval(window.autoSave);
                     window.autoSave = setInterval(() => {
-                        $.post($('a[name="save"]').attr("href"), {
-                            post: $('a[name="save"]').attr("post-id"),
+                        $.post("/shell?action=save_post", {
+                            post: $(".list-group-item.active").text(),
                             data: $(".editormd-markdown-textarea").val()
                         });
                     }, autoSaveTime);
