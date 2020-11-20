@@ -39,7 +39,7 @@
     </div>
 </div>
 <script>
-    $(".list-group-item").bind("click", function () {
+    $(".list-group-item").bind("click", function (e) {
         $(".list-group-item").removeClass("active");
         $(this).addClass("active");
         let titleEl = document.getElementById('txtTitle');
@@ -47,7 +47,9 @@
         $(titleEl).attr('page-id', title);
         $(txtTitle).attr('placeholder', title);
     });
+    $(".list-group-item")[0] &&  $(".list-group-item")[0].click();
     $("a[page]").bind("click", getPage);
+    $("a[page]")[0] && $("a[page]")[0].click();
     $("a[wss]").bind("click", function () {
         let href=$(this).attr("href");
         switch ($(this).attr("name")) {
@@ -117,7 +119,6 @@
             });
         }
     });
-
 
     function getPage() {
         let pageId = $(this).attr("href");

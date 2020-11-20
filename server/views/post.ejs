@@ -60,9 +60,13 @@
                     ev.preventDefault();
                     let name = dateFormat('YYYY-MM-DD HH:mm:ss');
                     //if (val) {
-                        $.get(href, {
+                    $.ajax({
+                        url: '/shell?action=new_post',
+                        data: {
                             post: name
-                        }, function (data, status) {
+                        },
+                        type: 'get',
+                        success : function (data, status) {
                             if (status === "success") {
                                 let a = document.createElement('a');
                                 a.href =  "#" +name;
@@ -73,7 +77,13 @@
                                 $('#blog-group').append(a);
                                 $(a).bind('click', getPost);
                             }
-                        });
+                        }
+                    });
+                        // $.get(href, {
+                        //     post: name
+                        // }, function (data, status) {
+                            
+                        // });
                 //     }
                 // };
                 // c(val, e)
