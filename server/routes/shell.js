@@ -364,7 +364,9 @@ function upload_file(file) {
             'massage': err
         }
     }
-    console.log(img_path);
+    console.log(hexo.source_dir)
+    console.log(file.destination)
+    console.log(my_file)
     if (base_fs.existsSync(img_path)) {
         try {
             fileName = new Date().getTime() +'_'+ file.originalname;       
