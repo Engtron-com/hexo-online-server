@@ -35,7 +35,7 @@ var postRouter = require('./routes/post');
 var getPostRouter = require('./routes/getPost');
 var pageRouter = require('./routes/page');
 var getPageRouter = require('./routes/getPage');
-var getImgSrc = require('./routes/getImgSrc');
+var getImgRouter = require('./routes/readImg');
 
 app.use(indexPath, indexRouter);
 app.use(indexPath + 'login', loginRouter);
@@ -46,7 +46,7 @@ app.use(indexPath + 'post', postRouter);
 app.use(indexPath + 'getPost', getPostRouter);
 app.use(indexPath + 'page', pageRouter);
 app.use(indexPath + 'getPage', getPageRouter);
-app.use(indexPath + 'img', getImgSrc);
+app.use(indexPath + 'readImg', getImgRouter);
 
 app.use(function (req, res, next) {
   next(createError(404));

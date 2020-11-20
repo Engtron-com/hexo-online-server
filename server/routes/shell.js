@@ -17,7 +17,6 @@ var info = {}
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    console.log('shell');
     if (req.session.user === olConfig.user && req.session.isLogin) {
         let data = null;
         switch (req.query.action) {
@@ -74,7 +73,7 @@ router.get('/', function (req, res, next) {
             case "rename_page":
                 data = rename_page(req.query.old_name, req.query.new_name);
                 res.send(data);
-                break
+                break;
             default:
                 send("Undefined command","error");
                 break;
@@ -365,9 +364,6 @@ function upload_file(file) {
             'massage': err
         }
     }
-    console.log(hexo.source_dir)
-    console.log(file.destination)
-    console.log(my_file)
     if (base_fs.existsSync(img_path)) {
         try {
             fileName = new Date().getTime() +'_'+ file.originalname;       
@@ -379,7 +375,7 @@ function upload_file(file) {
     }
     
     return {
-        'url': '/img/' + info.type + '/' + file_name + '/' + fileName,
+        'url': '/readImg?path=img/' + info.type + '/' + file_name + '/' + fileName,
         'success': 1,
         'massage': '上传成功'
     }
