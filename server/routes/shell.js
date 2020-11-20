@@ -338,7 +338,7 @@ function upload_file(file) {
     var file2_path = path.join(file1_path, file_name)
     var img_path = path.join(file2_path, file.originalname)
     var my_file = file.path;
-  
+    let fileName = file.originalname
     if (!base_fs.existsSync(file1_path)) {
         try {
             base_fs.mkdirSync(file1_path)
@@ -364,13 +364,19 @@ function upload_file(file) {
             'massage': err
         }
     }
-   
-    let newName = new Date().getTime() +'_'+ file.originalname;
     console.log(img_path);
-    console.log(file2_path+'/'+ newName);
-    base_fs.renameSync(img_path, file2_path+'/'+ newName); //修改图片默认地址
+    if (base_fs.existsSync(img_path)) {
+        try {
+            fileName = new Date().getTime() +'_'+ file.originalname;       
+            console.log(file2_path+'/'+ fileName);
+            base_fs.renameSync(img_path, file2_path+'/'+ fileName); //修改图片默认地址
+        } catch (error) {
+            
+        }
+    }
+    
     return {
-        'url': '/img/' + info.type + '/' + file_name + '/' + newName,
+        'url': '/img/' + info.type + '/' + file_name + '/' + fileName,
         'success': 1,
         'massage': '上传成功'
     }
