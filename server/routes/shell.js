@@ -59,6 +59,7 @@ router.get('/', function (req, res, next) {
             case "delete_post":
                 data = delete_post(req.query.post, res);
                 res.json(data);
+                console.log('发送成功')
                 break;
             case "rename_post":
                 data = rename_post(req.query.old_name, req.query.new_name);
@@ -211,12 +212,12 @@ function new_post(e) {
 function delete_post(name, res) {
     let postName = name.replace("%23", "");
     fs.unlink(path.join(hexo.source_dir, '_posts/', postName + ".md"), function (err) {
+        console.log('执行成功')
         if (err) {
             send("删除文章《" + postName + "》失败", "error");
             return {error: true };
         }
         send("删除《" + postName + "》文章成功","success");
-        send("", "reload");
         return {
             success: true,
             data: { pId: postName }
@@ -285,6 +286,7 @@ function delete_page(name, res) {
                 error: true,
             };
         }
+        console.log('执行成功')
         fs.rmdir(path.join(hexo.source_dir, page), function (err) {
             if (err) {
                 send("删除页面\"" + page + "\"失败", "error");
