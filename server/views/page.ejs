@@ -153,11 +153,12 @@
         a.className = "list-group-item";
         a.setAttribute('data-href', name);
         a.setAttribute('page', '');
-        a.style = "position: relative";
+        a.style = "position: relative;display:none;";
         a.innerText = name;
         $('#blog-group').append(a);
         $(a).bind('click', getPage);
         setTimeout( () => {
+            $(a).show();
             $(a).click();
         }, 1000);
     }

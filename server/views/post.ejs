@@ -196,13 +196,14 @@
         a.className = "list-group-item";
         a.setAttribute('data-href', name);
         a.setAttribute('post', '');
-        a.style = "position: relative";
+        a.style = "position: relative;display:none";
         a.innerText = name;
         $('#post-group').append(a);
         $(a).bind('click', getPost);
         setTimeout( () => {
+            $(a).show();
             $(a).click();
-        }, 1000);
+        }, 2000);
     }
 
     function toggleStyle(e) {

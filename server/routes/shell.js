@@ -221,7 +221,7 @@ function delete_post(name, res) {
             send("删除文章《" + postName + "》失败", "error");
             return {error: true };
         }
-        res.json({ success: true, data: { pId: postName } });
+        res.json({ success: true, pId: postName });
         send("删除《" + postName + "》文章成功","success");
     });
 }
@@ -250,7 +250,7 @@ function rename_post(old_name, new_name, res) {
             console.log(err)
             return
         }
-        res.json({ success: true, data: { new_name : new_name } });
+        res.json({ success: true, new_name : new_name });
         send(new_name, "success");
     })
 }
@@ -291,7 +291,7 @@ function delete_page(name, res) {
                     error: true,
                 };
             }
-            res.json({ success: true, data: { pId: page } });
+            res.json({ success: true, pId: page });
             send("删除\"" + page + "\"页面成功","success");
         });
     });
@@ -321,7 +321,7 @@ function rename_page(old_name, new_name, res) {
             console.log(err)
             return
         }
-        res.json({ success: true, data: { new_name: new_name} });
+        res.json({ success: true, new_name: new_name });
         send(new_name, "success");       
     })
 }
