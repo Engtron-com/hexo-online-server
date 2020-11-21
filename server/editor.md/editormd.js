@@ -2033,7 +2033,6 @@
             
             if(settings.watch || (!settings.watch && state.preview))
             {
-                debugger
                 var reg = /<img(.*?)src="(.*?)"(.*?)>/g;
 	            var result = newMarkdownDoc.replace(reg, '<img$1src="/readImg?path=$2"$3>');
                 previewContainer.html(result);
