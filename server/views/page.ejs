@@ -53,7 +53,7 @@
                     if (status === "success") {
                         addNode(name);
                     }
-                });
+                }, 'json');
                 break;
             case "delete":
                 let that = this;
@@ -65,7 +65,7 @@
                         if (status === "success") {
                             deleteNode(data.pId);
                         }
-                    });
+                    }, 'json');
                 });
                 break;
             default:
