@@ -18,69 +18,74 @@ var info = {}
 /* GET home page. */
 router.get('/', function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
-        let data = null;
         switch (req.query.action) {
             case "pull":
                 gitPull();
+                res.end();
                 break;
             case "push":
                 gitPush();
+                res.end();
                 break;
             case "get_postname":
                 info = {
                     name: req.query.post,
                     type: 'post'
-                }
+                };
+                res.end();
                 break
             case "get_pagename":
                 info = {
                     name: req.query.page,
                     type: 'page'
                 }
+                res.end();
                 break
             case "clean":
                 hexoClean();
+                res.end();
                 break;
             case "generate": 
                 hexoGenerate();
+                res.end();
                 break;
             case "deploy":
                 hexoDeploy();
+                res.end();
                 break;
             case "server":
                 hexoServer();
+                res.end();
                 break;
             case "close_server":
                 closeServer();
+                res.end();
                 break;
             case "new_post":
                 new_post(req.query.post);
+                res.status(200).end();
                 break;
             case "delete_post":
-                data = delete_post(req.query.post, res);
-                res.json(data);
-                console.log('发送成功')
+                delete_post(req.query.post, res);
                 break;
             case "rename_post":
-                data = rename_post(req.query.old_name, req.query.new_name);
-                res.json(data);
+                rename_post(req.query.old_name, req.query.new_name, res);
                 break
             case "new_page":
                 new_page(req.query.page);
+                res.status(200).end();
                 break;
             case "delete_page":
-                data = delete_page(req.query.page, res);
-                res.json(data);
+                delete_page(req.query.page, res);
                 break;
             case "rename_page":
-                data = rename_page(req.query.old_name, req.query.new_name);
-                res.json(data);
+                rename_page(req.query.old_name, req.query.new_name, res);
                 break;
             default:
                 send("Undefined command","error");
+                res.end();
                 break;
         }
-        res.status(200).end();
     } else {
         res.render('login', { script: '' });
     }
@@ -90,21 +95,21 @@ router.get('/', function (req, res, next) {
         switch (req.query.action) {
             case "save_post":
                 data = save_post(req.body.post, req.body.data);
-                res.send(data)
+                res.send(data);
                 break;
             case "save_page":
                 data = save_page(req.body.page, req.body.data);
-                res.send(data)
+                res.send(data);
                 break;
             case "upload_file":
                 data = upload_file(req.file);
-                res.send(data)
+                res.send(data);
                 break;
             default:
                 send("Undefined command","error");
+                res.end();
                 break;
         }
-        res.status(200).end();
     } else {
         res.render('login', { script: '' });
     }
@@ -212,16 +217,12 @@ function new_post(e) {
 function delete_post(name, res) {
     let postName = name.replace("%23", "");
     fs.unlink(path.join(hexo.source_dir, '_posts/', postName + ".md"), function (err) {
-        console.log('执行成功')
         if (err) {
             send("删除文章《" + postName + "》失败", "error");
             return {error: true };
         }
+        res.json({ success: true, data: { pId: postName } });
         send("删除《" + postName + "》文章成功","success");
-        return {
-            success: true,
-            data: { pId: postName }
-        };
     });
 }
 function save_post(id, data) {
@@ -242,19 +243,15 @@ function save_post(id, data) {
         'msg': "保存文章《" + postName + "》成功"
     };
 }
-function rename_post(old_name, new_name) {
+function rename_post(old_name, new_name, res) {
     old_name = old_name.replace("%23", "");
     base_fs.rename(path.join(hexo.source_dir, '_posts/', old_name + ".md"), path.join(hexo.source_dir, '_posts/', new_name + ".md"),function (err) {
         if (err) {
             console.log(err)
             return
         }
+        res.json({ success: true, data: { new_name : new_name } });
         send(new_name, "success");
-        send("", "reload");
-        return {
-            success: true,
-            data: {new_name : new_name}
-        };
     })
 }
 function new_page(e) {
@@ -294,12 +291,8 @@ function delete_page(name, res) {
                     error: true,
                 };
             }
+            res.json({ success: true, data: { pId: page } });
             send("删除\"" + page + "\"页面成功","success");
-            send("", "reload");
-            return {
-                success: true,
-                data: { pId: page }
-            };
         });
     });
 }
@@ -321,19 +314,15 @@ function save_page(id, data) {
         'msg': "保存页面\"" + page + "\"成功"
     };
 }
-function rename_page(old_name, new_name) {
+function rename_page(old_name, new_name, res) {
     old_name = old_name.replace("%23", "");
     base_fs.rename(path.join(hexo.source_dir, old_name), path.join(hexo.source_dir, new_name),function (err) {
         if (err) {
             console.log(err)
             return
         }
-        send(new_name, "success");
-        send("", "reload");
-        return {
-            success: true,
-            data: {new_name}
-        };
+        res.json({ success: true, data: { new_name: new_name} });
+        send(new_name, "success");       
     })
 }
 function upload_file(file) {

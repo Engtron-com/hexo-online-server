@@ -90,7 +90,6 @@
                 },
                 type: 'get',
                 success : function(res) {
-                    console.log(data)
                     let name = data.new_name;
                     $(currentEl).text(name);
                     $.ajax({
@@ -203,7 +202,7 @@
         $(a).bind('click', getPost);
         setTimeout( () => {
             $(a).click();
-        }, 2000);
+        }, 1000);
     }
 
     function toggleStyle(e) {
