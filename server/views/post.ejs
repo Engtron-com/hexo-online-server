@@ -205,7 +205,7 @@
 
     function toggleStyle(e) {
         $(".list-group-item").removeClass("active");
-        $(this).addClass("active");
+        $(e.target).addClass("active");
         let titleEl = document.getElementById('txtTitle');
         let title = e.target.innerText || '#';
         $(titleEl).attr('page-id', title);

@@ -16,4 +16,3 @@ function dateFormat(fmt, date = new Date()) {
     };
     return fmt;
 }
-module.exports = dateFormat;

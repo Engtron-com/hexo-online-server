@@ -32,7 +32,7 @@ router.get('/', function (req, res, next) {
                     type: 'post'
                 }
                 break
-            case "get_postname":
+            case "get_pagename":
                 info = {
                     name: req.query.page,
                     type: 'page'
@@ -370,8 +370,7 @@ function upload_file(file) {
     }
     if (base_fs.existsSync(img_path)) {
         try {
-            fileName = new Date().getTime() +'_'+ file.originalname;       
-            console.log(file2_path+'/'+ fileName);
+            fileName = new Date().getTime() +'_'+ file.originalname;
             base_fs.renameSync(img_path, file2_path+'/'+ fileName); //修改图片默认地址
         } catch (error) {
             
