@@ -215,7 +215,7 @@ function delete_post(name, res) {
         }
         send("删除《" + postName + "》文章成功","success");
         send("", "reload");
-        res.json({
+        res.send({
             success: true,
             data: { pId: postName }
         });
@@ -292,8 +292,9 @@ function delete_page(name, res) {
             }
             send("删除\"" + page + "\"页面成功","success");
             send("", "reload");
-            res.json({
+            res.send({
                 success: true,
+                data: { pId: page }
             });
         });
     });
