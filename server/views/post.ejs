@@ -147,7 +147,7 @@
         }
     }, 1500));
 
-    function getPost() {
+    function getPost(e) {
         let postId = $(this).attr("data-href");
         $.get('/getPost', {
             post: postId
