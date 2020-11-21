@@ -17,6 +17,7 @@ var info = {}
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
+    console.log('这个是图片'+req.query)
     if (req.session.user === olConfig.user && req.session.isLogin) {
         let data = null;
         switch (req.query.action) {
@@ -380,7 +381,7 @@ function upload_file(file) {
     }
     
     return {
-        'url': '/readImg?path=img/' + info.type + '/' + file_name + '/' + fileName,
+        'url': '/img/' + info.type + '/' + file_name + '/' + fileName,
         'success': 1,
         'massage': '上传成功'
     }
