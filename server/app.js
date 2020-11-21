@@ -47,7 +47,7 @@ app.use(indexPath + 'post', postRouter);
 app.use(indexPath + 'getPost', getPostRouter);
 app.use(indexPath + 'page', pageRouter);
 app.use(indexPath + 'getPage', getPageRouter);
-app.use(/\.(png|jpg|jpeg|gif|bmp|ico|image)$/, getImgRouter);
+app.use(/\/img|\.(png|jpg|jpeg|gif|bmp|ico|image)$/, getImgRouter);
 
 app.use(function (req, res, next) {
   next(createError(404));
