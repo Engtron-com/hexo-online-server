@@ -48,20 +48,25 @@
         let href = $(this).attr("data-href");
         switch ($(this).attr("name")) {
             case "new":
-                let name = 'blog-' + dateFormat('mm-ss');
+                let name = '博客' + dateFormat('mmss');
                 $.get(href, {
                     page: name
                 }, function (data, status) {
                     if (status === "success") {
-                        addItem(name);
+                        addNode(name);
                     }
                 });
                 break;
             case "delete":
                 let that = this;
                 $.MsgBox.Confirm('温馨提示！', '确认删除当前博客？', function() {
+                    let pId = $(that).attr("page-id")
                     $.get(href, {
-                        page: $(that).attr("page-id")
+                        page: pId
+                    }, function (data, status) {
+                        if (status === "success") {
+                            deleteNode(pId)
+                        }
                     });
                 });
                 break;
@@ -133,7 +138,11 @@
         });
     }
 
-    function addItem(name) {
+    function deleteNode(id) {
+        $('#blog-group').remove('a[data-href="'+id+'"]');
+    }
+
+    function addNode(name) {
         let a = document.createElement('a');
         a.href = "#" + name;
         a.className = "list-group-item";
