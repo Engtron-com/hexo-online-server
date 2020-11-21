@@ -17,7 +17,6 @@ var info = {}
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    console.log('这个是图片'+req.query)
     if (req.session.user === olConfig.user && req.session.isLogin) {
         let data = null;
         switch (req.query.action) {
