@@ -209,16 +209,18 @@ function new_post(e) {
 }
 function delete_post(name, res) {
     let postName = name.replace("#", "").replace("%23", "");
-    try {
-        fs.unlink(path.join(hexo.source_dir, '_posts/', postName + ".md"));
-    } catch (error) {
-        send("删除文章《" + postName + "》失败", "error"); 
-    }
-    send("删除《" + postName + "》文章成功","success");
-    res.json({
-        success: true,
-        data: { pId: postName }
+    
+    fs.unlink(path.join(hexo.source_dir, '_posts/', postName + ".md"), function (err) {
+        if(err) {
+            send("删除文章《" + postName + "》失败", "error");
+        }
+        send("删除《" + postName + "》文章成功","success");
+        res.json({
+            success: true,
+            data: { pId: postName }
+        });
     });
+  
 }
 function save_post(id, data) {
     let postName = id.replace("#", "").replace("%23", "");

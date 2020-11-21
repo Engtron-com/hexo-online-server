@@ -3959,7 +3959,9 @@
 		markdownDoc = new String(markdownDoc);
         
         var markdownParsed = marked(markdownDoc, markedOptions);
-        
+        console.log('-------------------------------------------------------------------------')
+        console.log(markdownDoc)
+        console.log(markedOptions)
         markdownParsed = editormd.filterHTMLTags(markdownParsed, settings.htmlDecode);
         
         if (settings.markdownSourceCode) {
@@ -3969,7 +3971,7 @@
         }
         
         div.addClass("markdown-body " + this.classPrefix + "html-preview").append(markdownParsed);
-        
+        console.log(markdownParsed)
         var tocContainer = (settings.tocContainer !== "") ? $(settings.tocContainer) : div;
         
         if (settings.tocContainer !== "")

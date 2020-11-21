@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/css/editormd.min.css" />
-<script src="/editormd.min.js"></script>
+<script src="/editormd.js"></script>
 <script src="/js/hintDialog.js"></script>
 <script src="/js/dateFormat.js"></script>
 <script src="/js/uploadImg.js"></script>
@@ -182,6 +182,7 @@
     }
 
     function deleteNode(id) {
+        console.log('a[data-href="#'+id+'"]')
         $('#post-group').remove('a[data-href="#'+id+'"]');
         firstClickItem();
     }
