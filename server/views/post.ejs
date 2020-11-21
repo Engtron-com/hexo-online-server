@@ -6,7 +6,7 @@
 <div style="width: 20%;position: fixed;top:51px;bottom: 0;border-right: 1px solid #333333;height: 95%;">
     <div id="post-group" style="width: 100%;height: 95%;overflow-x: hidden;max-height: 95%;overflow-y: auto;background: #ffffff;">
         <% posts.forEach(function(post){ %>
-            <a href="javascript:void(0)" data-href="#<%= post %>" class="list-group-item" post style="position: relative;"><%= post %></a>
+            <a href="javascript:void(0)" data-href="<%= post %>" class="list-group-item" post style="position: relative;"><%= post %></a>
         <% }); %>
     </div>
     <div style="width: 100%;height: 5%;padding-top: 4px;display: flex; justify-content: center;padding: 0;">
@@ -65,7 +65,7 @@
                         post: pId
                     }, function (data, status) {
                         if (status === "success") {
-                            deleteNode(data.pId)
+                            deleteNode(data.pId);
                         }
                     });
                 })
@@ -182,8 +182,8 @@
     }
 
     function deleteNode(id) {
-        console.log('a[data-href="#'+id+'"]')
-        $('#post-group').remove('a[data-href="#'+id+'"]');
+        console.log('a[data-href="'+id+'"]')
+        $('#post-group').remove('a[data-href="'+id+'"]');
         firstClickItem();
     }
 
@@ -195,7 +195,7 @@
         let a = document.createElement('a');
         a.href = "javascript:void(0)";
         a.className = "list-group-item";
-        a.setAttribute('data-href', '#' + name);
+        a.setAttribute('data-href', name);
         a.setAttribute('post', '');
         a.style = "position: relative";
         a.innerText = name;

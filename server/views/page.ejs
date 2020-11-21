@@ -6,7 +6,7 @@
 <div style="width: 20%;position: fixed;top:51px;bottom: 0;border-right: 1px solid #333333;height: 95%;">
     <div id="blog-group" style="width: 100%;height: 95%;overflow-x: hidden;max-height: 95%;overflow-y: auto;background: #ffffff;">
         <% pages.forEach(function(page){ %>
-            <a href="javascript:void(0)" data-href="#<%= page %>" class="list-group-item" page style="position: relative;"><%= page %></a>
+            <a href="javascript:void(0)" data-href="<%= page %>" class="list-group-item" page style="position: relative;"><%= page %></a>
         <% }); %>
     </div>
     <div style="width: 100%;height: 5%;padding-top: 4px;display: flex; justify-content: center;padding: 0;">
@@ -63,7 +63,7 @@
                         page: pId
                     }, function (data, status) {
                         if (status === "success") {
-                            deleteNode(pId)
+                            deleteNode(data.pId);
                         }
                     });
                 });
@@ -110,7 +110,7 @@
         $.get('/getPage', {
             page: pageId
         }, function (data, status, xhr) {
-            if (status === "success" && data.success) {
+            if (status === "success") {
                 toggleStyle(e);
                 let editor = editormd("editor", {
                     width: "100%",
@@ -150,8 +150,9 @@
 
     function addNode(name) {
         let a = document.createElement('a');
-        a.href = "#" + name;
+        a.href = "javascript:void(0)";
         a.className = "list-group-item";
+        a.setAttribute('data-href', name);
         a.setAttribute('page', '');
         a.style = "position: relative";
         a.innerText = name;

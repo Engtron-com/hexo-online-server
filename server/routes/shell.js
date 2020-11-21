@@ -67,8 +67,7 @@ router.get('/', function (req, res, next) {
                 new_page(req.query.page);
                 break;
             case "delete_page":
-                data = delete_page(req.query.page, res);
-                res.json(data)
+                delete_page(req.query.page, res);
                 break;
             case "rename_page":
                 data = rename_page(req.query.old_name, req.query.new_name);
@@ -209,18 +208,16 @@ function new_post(e) {
 }
 function delete_post(name, res) {
     let postName = name.replace("#", "").replace("%23", "");
-    
-    fs.unlink(path.join(hexo.source_dir, '_posts/', postName + ".md"), function (err) {
-        if(err) {
-            send("删除文章《" + postName + "》失败", "error");
-        }
-        send("删除《" + postName + "》文章成功","success");
-        res.json({
-            success: true,
-            data: { pId: postName }
-        });
+    try {
+        fs.unlink(path.join(hexo.source_dir, '_posts/', postName + ".md"));
+    } catch(err) {
+        send("删除文章《" + postName + "》失败", "error");
+    }
+    send("删除《" + postName + "》文章成功","success");
+    res.json({
+        success: true,
+        data: { pId: postName }
     });
-  
 }
 function save_post(id, data) {
     let postName = id.replace("#", "").replace("%23", "");
@@ -268,8 +265,8 @@ function new_page(e) {
         }
     });
 }
-function delete_page(e) {
-    let page = e.replace("#", "").replace("%23", "");
+function delete_page(name, res) {
+    let page = name.replace("#", "").replace("%23", "");
     let files = fs.readdirSync(path.join(hexo.source_dir, page));
     if (files.length > 1) {
         send("\"" + page + "\"文件夹内有其他文件，请手动删除", "error");
@@ -278,31 +275,22 @@ function delete_page(e) {
             msg: "\"" + page + "\"文件夹内有其他文件，请手动删除"
         };
     }
-    fs.unlink(path.join(hexo.source_dir, page, "index.md"), function (err) {
-        if (err) {
-            send("删除页面\"index.md\"文件失败", "error");
-            return {
-                error: true,
-                msg: "删除页面\"index.md\"文件失败"
-            };
-        }
-        fs.rmdir(path.join(hexo.source_dir, page), function (err) {
-            if (err) {
-                send("删除页面\"" + page + "\"失败", "error");
-                return {
-                    error: true,
-                    msg: "删除页面\"" + page + "\"失败"
-                };
-            }
-            send("删除\"" + page + "\"页面成功","success");
-            send("", "reload");
-            return {
-                success: true,
-                data: {
-                    pId: page
-                }
-            };
+    try {
+        fs.unlink(path.join(hexo.source_dir, page, "index.md"));
+    } catch (error) {
+        send("删除页面\"index.md\"文件失败", "error");
+        res.json({
+            error: true,
+            msg: "删除页面\"index.md\"文件失败"
         });
+    }
+    send("删除\"" + page + "\"页面成功","success");
+    send("", "reload");
+    res.json({
+        success: true,
+        data: {
+            pId: page
+        }
     });
 }
 function save_page(id, data) {
