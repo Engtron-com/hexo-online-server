@@ -157,7 +157,9 @@
         a.innerText = name;
         $('#blog-group').append(a);
         $(a).bind('click', getPage);
-        $(a).click();
+        setTimeout( () => {
+            $(a).click();
+        }, 100);
     }
 
     function toggleStyle(e) {

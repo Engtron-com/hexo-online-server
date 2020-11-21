@@ -200,7 +200,9 @@
         a.innerText = name;
         $('#post-group').append(a);
         $(a).bind('click', getPost);
-        $(a).click();
+        setTimeout( () => {
+            $(a).click();
+        }, 100);
     }
 
     function toggleStyle(e) {
