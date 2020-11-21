@@ -40,11 +40,9 @@
 </div>
 <script>
     
-    $(".list-group-item").bind("click", toggleStyle);
-    $(".list-group-item")[0] &&  $(".list-group-item")[0].click();
     $("a[post]").bind("click", getPost);
 
-    $("a[post]")[0] && $("a[post]")[0].click();
+    firstClickItem();
     $("a[wss]").bind("click", function (e) {
         e.preventDefault();
         let href = $(this).attr("data-href");
@@ -67,7 +65,7 @@
                         post: pId
                     }, function (data, status) {
                         if (status === "success") {
-                            deleteNode(pId)
+                            deleteNode(data.pId)
                         }
                     });
                 })
@@ -92,11 +90,13 @@
                 },
                 type: 'get',
                 success : function(res) {
-                    $(currentEl).text(val);
+                    console.log(data)
+                    let name = data.new_name;
+                    $(currentEl).text(name);
                     $.ajax({
                         url: '/shell?action=save_post',
                         data: {
-                            post: val,
+                            post: name,
                             data: $(".editormd-markdown-textarea").val()
                         },
                         type: 'post',
@@ -153,6 +153,7 @@
             post: postId
         }, function (data, status, xhr) {
             if (status === "success" && data.success) {
+                toggleStyle(e);
                 let editor = editormd("editor", {
                     width: "100%",
                     height: "95%",
@@ -181,7 +182,12 @@
     }
 
     function deleteNode(id) {
-        $('#post-group').remove('a[data-href="'+id+'"]');
+        $('#post-group').remove('a[data-href="#'+id+'"]');
+        firstClickItem();
+    }
+
+    function firstClickItem() {
+        $("a[post]")[0] && $("a[post]")[0].click();
     }
 
     function addNode(name) {
@@ -194,7 +200,7 @@
         a.innerText = name;
         $('#post-group').append(a);
         $(a).bind('click', getPost);
-        $(a).bind('click', toggleStyle);
+        $(a).click();
     }
 
     function toggleStyle(e) {

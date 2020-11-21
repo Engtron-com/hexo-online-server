@@ -57,22 +57,22 @@ router.get('/', function (req, res, next) {
                 new_post(req.query.post);
                 break;
             case "delete_post":
-                delete_post(req.query.post);
+                delete_post(req.query.post, res);
                 break;
             case "rename_post":
                 data = rename_post(req.query.old_name, req.query.new_name);
-                res.send(data);
+                res.json(data);
                 break
             case "new_page":
                 new_page(req.query.page);
                 break;
             case "delete_page":
                 data = delete_page(req.query.page, res);
-                res.send(data)
+                res.json(data)
                 break;
             case "rename_page":
                 data = rename_page(req.query.old_name, req.query.new_name);
-                res.send(data);
+                res.json(data);
                 break;
             default:
                 send("Undefined command","error");
@@ -207,15 +207,17 @@ function new_post(e) {
         }
     });
 }
-function delete_post(e) {
-    let postName = e.replace("#", "").replace("%23", "");
-    fs.unlink(path.join(hexo.source_dir, '_posts/', postName + ".md"), function (err) {
-        if (err) {
-            send("删除文章《" + postName + "》失败", "error");
-            return console.error(err);
-        }
-        send("删除《" + postName + "》文章成功","success");
-        //send("", "reload");
+function delete_post(name, res) {
+    let postName = name.replace("#", "").replace("%23", "");
+    try {
+        fs.unlink(path.join(hexo.source_dir, '_posts/', postName + ".md"));
+    } catch (error) {
+        send("删除文章《" + postName + "》失败", "error"); 
+    }
+    send("删除《" + postName + "》文章成功","success");
+    res.json({
+        success: true,
+        data: { pId: postName }
     });
 }
 function save_post(id, data) {
@@ -232,7 +234,7 @@ function save_post(id, data) {
     }
     send("保存《" + postName + "》文章成功","success");
     return {
-        'code': 0,
+        'code': 1,
         'msg': "保存文章《" + postName + "》成功"
     };
 }
@@ -246,8 +248,8 @@ function rename_post(old_name, new_name) {
         send(new_name, "success");
         send("", "reload");
         return {
-            'code':1,
-            'new_name': new_name
+            success: true,
+            data: {new_name}
         };
     })
 }
@@ -270,31 +272,33 @@ function delete_page(e) {
     if (files.length > 1) {
         send("\"" + page + "\"文件夹内有其他文件，请手动删除", "error");
         return {
-            'code': 2,
-            'msg': "\"" + page + "\"文件夹内有其他文件，请手动删除"
+            error: true,
+            msg: "\"" + page + "\"文件夹内有其他文件，请手动删除"
         };
     }
     fs.unlink(path.join(hexo.source_dir, page, "index.md"), function (err) {
         if (err) {
             send("删除页面\"index.md\"文件失败", "error");
             return {
-                'code': 1,
-                'msg': "删除页面\"index.md\"文件失败"
+                error: true,
+                msg: "删除页面\"index.md\"文件失败"
             };
         }
         fs.rmdir(path.join(hexo.source_dir, page), function (err) {
             if (err) {
                 send("删除页面\"" + page + "\"失败", "error");
                 return {
-                    'code': 1,
-                    'msg': "删除页面\"" + page + "\"失败"
+                    error: true,
+                    msg: "删除页面\"" + page + "\"失败"
                 };
             }
             send("删除\"" + page + "\"页面成功","success");
             send("", "reload");
             return {
-                'code': 0,
-                'msg': "删除\"" + page + "\"页面成功"
+                success: true,
+                data: {
+                    pId: page
+                }
             };
         });
     });
@@ -327,8 +331,8 @@ function rename_page(old_name, new_name) {
         send(new_name, "success");
         send("", "reload");
         return {
-            'code':1,
-            'new_name': new_name
+            success: true,
+            data: {new_name}
         };
     })
 }
