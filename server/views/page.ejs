@@ -41,7 +41,7 @@
 <script>
     $("a[page]").bind("click", getPage);
     firstClickItem();
-    $("a[wss]").bind("click", function () {
+    $("a[wss]").bind("click", function (e) {
         e.preventDefault();
         let href = $(this).attr("data-href");
         switch ($(this).attr("name")) {

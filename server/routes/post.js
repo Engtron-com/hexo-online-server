@@ -18,6 +18,8 @@ router.get('/', function (req, res, next) {
                     posts.push(e.replace(/\.md$/, ''));
                 }
             });
+            console.log(files)
+            console.log(posts)
             if (req.query.pjax) {
                 res.render('post', { posts, autoSave: olConfig.autoSave });
             } else {

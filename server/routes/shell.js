@@ -378,24 +378,10 @@ function upload_file(file) {
     }
     
     return {
-        'url': '/readImg?img/' + info.type + '/' + file_name + '/' + fileName,
+        'url': '/readImg?path=img/' + info.type + '/' + file_name + '/' + fileName,
         'success': 1,
         'massage': '上传成功'
     }
 }
-function readImg(file, res) {
-    console.log(file);
-    let dirName = file.replace('readImg?', '').replace("#", "").replace("%23", "");
-    console.log(dirName);
-    console.log(path.join(hexo.source_dir, dirName));
-    fs.readFile(path.join(hexo.source_dir, dirName),'binary', function (err, data) {
-        if (err) {
-            send("读取图片"+dirName+"失败", "error");
-            res.json({ success: false, data: err });
-            console.error(err);
-            return;
-        }
-        res.write(data, 'binary');
-    });  
-}
+
 module.exports = router;
