@@ -88,7 +88,6 @@
                 },
                 type: 'get',
                 success : function(data) {
-                    console.log(data)
                     let name = data.new_name;
                     $(currentEl).text(name);
                     $.post(href, {
