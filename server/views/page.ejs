@@ -52,6 +52,7 @@
                 }, function (data, status) {
                     if (status === "success" && data.success) {
                         addNode(data.name);
+                        swal(data.msg, 'success');
                     }
                 }, 'json');
                 break;
@@ -64,6 +65,7 @@
                     }, function (data, status) {
                         if (status === "success" && data.success) {
                             deleteNode(data.pId);
+                            swal(data.msg, 'success');
                         }
                     }, 'json');
                 });
@@ -147,7 +149,7 @@
     }
 
     function deleteNode(id) {
-        $('#blog-group').remove('a[data-href="'+id+'"]');
+        $('#blog-group a[data-href="'+id+'"]').remove();
         firstClickItem();
     }
 
@@ -168,7 +170,7 @@
         setTimeout( () => {
             $(a).show();
             $(a).click();
-        }, 2000);
+        }, 1500);
     }
 
     function toggleStyle(e) {
