@@ -124,11 +124,10 @@
   </div>
   <script>
     if (location.pathname !== "/") {
-      $("ul.nav li").removeClass("active");
-      $('a[href="' + location.pathname + '"]').parent().addClass('active');
+      switchActive(location.pathname);
     }
-    window.addEventListener('history', function(e) {
-        console.log(e)
+    window.addEventListener('popstate', function(e) {
+      console.log(location.hash);
     })
     let ws = new WebSocket('<%- ssl?"wss":"ws" %>://' + window.location.hostname + ':<%= wsPort %>');
     ws.onopen = function (ev) {
@@ -190,6 +189,11 @@
         getPageParams(path);
         return false;
       });
+
+      function switchActive(pathname) {
+        $("ul.nav li").removeClass("active");
+        $('a[href="' + pathname + '"]').parent().addClass('active');
+      }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
   <script src="https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.10/dist/js/alertify.js"></script>

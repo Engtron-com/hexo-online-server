@@ -199,7 +199,7 @@ function hexoDeploy() {
     });
 
 }
-function new_post(e) {
+function new_post(e, res) {
     shell({
         e: "hexo new " + e, next: () => {
             let checkExists = setTimeout(() => {
@@ -252,7 +252,7 @@ function rename_post(old_name, new_name, res) {
         res.json({ success: true, new_name : new_name });
     })
 }
-function new_page(e) {
+function new_page(e, res) {
     shell({
         e: "hexo new page " + e, next: () => {
             let checkExists = setTimeout(() => {
