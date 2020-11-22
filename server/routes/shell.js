@@ -62,8 +62,7 @@ router.get('/', function (req, res, next) {
                 res.end();
                 break;
             case "new_post":
-                new_post(req.query.post);
-                res.status(200).end();
+                new_post(req.query.post, res);
                 break;
             case "delete_post":
                 delete_post(req.query.post, res);
@@ -72,8 +71,7 @@ router.get('/', function (req, res, next) {
                 rename_post(req.query.old_name, req.query.new_name, res);
                 break
             case "new_page":
-                new_page(req.query.page);
-                res.status(200).end();
+                new_page(req.query.page, res);
                 break;
             case "delete_page":
                 delete_page(req.query.page, res);
@@ -95,11 +93,11 @@ router.get('/', function (req, res, next) {
         switch (req.query.action) {
             case "save_post":
                 data = save_post(req.body.post, req.body.data);
-                res.send(data);
+                res.json(data);
                 break;
             case "save_page":
                 data = save_page(req.body.page, req.body.data);
-                res.send(data);
+                res.json(data);
                 break;
             case "upload_file":
                 data = upload_file(req.file);
@@ -208,7 +206,7 @@ function new_post(e) {
                 if (fs.existsSync(path.join(hexo.source_dir, '_posts/', e + ".md"))) {
                     clearTimeout(checkExists);
                     send("新建《" + e + "》文章成功","success");
-                    //send("", "reload");
+                    res.json({ success: true, name: e });
                 }
             }, 100);
         }
@@ -221,8 +219,8 @@ function delete_post(name, res) {
             send("删除文章《" + postName + "》失败", "error");
             return {error: true };
         }
-        res.json({ success: true, pId: postName });
         send("删除《" + postName + "》文章成功","success");
+        res.json({ success: true, pId: postName });
     });
 }
 function save_post(id, data) {
@@ -233,14 +231,14 @@ function save_post(id, data) {
     catch (err) {
         send("保存文章《" + postName + "》失败", "error");
         return {
-            'code': 0,
-            'msg': "保存文章《" + postName + "》失败"
+            error: true,
+            //'msg': "保存文章《" + postName + "》失败"
         };
     }
-    send("保存《" + postName + "》文章成功","success");
+    //send("保存《" + postName + "》文章成功","success");
     return {
-        'code': 1,
-        'msg': "保存文章《" + postName + "》成功"
+        success: true,
+        msg: "保存文章《" + postName + "》成功"
     };
 }
 function rename_post(old_name, new_name, res) {
@@ -250,8 +248,8 @@ function rename_post(old_name, new_name, res) {
             console.log(err)
             return
         }
+        //send(new_name, "success");
         res.json({ success: true, new_name : new_name });
-        send(new_name, "success");
     })
 }
 function new_page(e) {
@@ -261,6 +259,7 @@ function new_page(e) {
                 if (fs.existsSync(path.join(hexo.source_dir, e, "index.md"))) {
                     clearTimeout(checkExists);
                     send("新建\"" + e + "\"页面成功","success");
+                    res.json({ success: true, name: e });
                     //send("", "reload");
                 }
             }, 1000);
@@ -291,8 +290,8 @@ function delete_page(name, res) {
                     error: true,
                 };
             }
-            res.json({ success: true, pId: page });
             send("删除\"" + page + "\"页面成功","success");
+            res.json({ success: true, pId: page });  
         });
     });
 }
@@ -304,14 +303,14 @@ function save_page(id, data) {
     catch (err) {
         send("保存页面\"" + page + "\"失败", "error");
         return {
-            'code': 0,
-            'msg': "保存页面\"" + page + "\"失败"
+            error: true,
+            msg: "保存页面\"" + page + "\"失败"
         };
     }
-    send("保存\"" + page + "\"页面成功","success");
+    //send("保存\"" + page + "\"页面成功","success");
     return {
-        'code': 1,
-        'msg': "保存页面\"" + page + "\"成功"
+        success: true,
+        msg: "保存页面\"" + page + "\"成功"
     };
 }
 function rename_page(old_name, new_name, res) {
@@ -322,7 +321,6 @@ function rename_page(old_name, new_name, res) {
             return
         }
         res.json({ success: true, new_name: new_name });
-        send(new_name, "success");       
     })
 }
 function upload_file(file) {

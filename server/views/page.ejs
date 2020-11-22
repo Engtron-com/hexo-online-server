@@ -50,8 +50,8 @@
                 $.get(href, {
                     page: name
                 }, function (data, status) {
-                    if (status === "success") {
-                        addNode(name);
+                    if (status === "success" && data.success) {
+                        addNode(data.name);
                     }
                 }, 'json');
                 break;
@@ -62,7 +62,7 @@
                     $.get(href, {
                         page: pId
                     }, function (data, status) {
-                        if (status === "success") {
+                        if (status === "success" && data.success) {
                             deleteNode(data.pId);
                         }
                     }, 'json');
@@ -93,6 +93,10 @@
                     $.post(href, {
                         page: name,
                         data: $(".editormd-markdown-textarea").val()
+                    }, function(data, status) {
+                        if (status === "success" && data.success) {
+                            swal(data.msg, 'success')
+                        }
                     });
                 }
             })
@@ -100,6 +104,10 @@
             $.post(href, {
                 page:  $(currentEl).text(),
                 data: $(".editormd-markdown-textarea").val()
+            }, function(data, status) {
+                if (status === "success" && data.success) {
+                    swal(data.msg, 'success')
+                }
             });
         }
     });
@@ -109,7 +117,7 @@
         $.get('/getPage', {
             page: pageId
         }, function (data, status, xhr) {
-            if (status === "success") {
+            if (status === "success" && data.success) {
                 toggleStyle(e);
                 let editor = editormd("editor", {
                     width: "100%",
@@ -160,7 +168,7 @@
         setTimeout( () => {
             $(a).show();
             $(a).click();
-        }, 1000);
+        }, 2000);
     }
 
     function toggleStyle(e) {
