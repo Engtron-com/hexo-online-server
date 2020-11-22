@@ -152,7 +152,7 @@
         $.get("/shell?action=clean", function (data, status, xhr) {
             if (status === "success") {  
                 $.get("/shell?action=generate", function (data, status, xhr) {
-                    if (status === "success") swal('发布成功');
+                    if (status === "success") swal('发布成功', 'success');
                 });
             }
         })
