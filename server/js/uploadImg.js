@@ -19,7 +19,7 @@ function initPasteDragImg(Editor){
             console.log("粘贴内容非图片");
             return;
         }
-        uploadImg(file, Editor, true);
+        uploadImg(file, Editor);
     });
     var dashboard = document.getElementById(Editor.id)
     dashboard.addEventListener("dragover", function (e) {
@@ -33,11 +33,11 @@ function initPasteDragImg(Editor){
     dashboard.addEventListener("drop", function (e) {
         e.preventDefault()
         e.stopPropagation()
-     var files = this.files || e.dataTransfer.files;
-        uploadImg(files[0], Editor, false);
+        var files = this.files || e.dataTransfer.files;
+        uploadImg(files[0], Editor);
     })
 }
-function uploadImg(file, Editor, isState){
+function uploadImg(file, Editor){
     let formData = new FormData();
     formData.append('editormd-image-file', file);
     $.ajax({

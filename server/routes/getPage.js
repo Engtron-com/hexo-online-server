@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
                 console.error(err);
                 return;
             }
-            res.json({ success: true, data: data.toString() });
+            res.json({ success: true, pId: fileName, data: data.toString() });
         });
     } else {
         res.render('login', { script: '' });
