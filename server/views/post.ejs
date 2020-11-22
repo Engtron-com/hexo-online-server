@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/css/editormd.min.css" />
-<script src="/editormd.min.js"></script>
+<script src="/editormd.js"></script>
 <script src="/js/hintDialog.js"></script>
 <script src="/js/dateFormat.js"></script>
 <script src="/js/uploadImg.js"></script>
@@ -156,14 +156,14 @@
             post: postId
         }, function (data, status, xhr) {
             if (status === "success" && data.success) {
-                toggleStyle(e, data.pId);
+                toggleStyle(e, postId);
                 let editor = editormd("editor", {
                     width: "100%",
                     height: "95%",
                     markdown: data.data, // dynamic set Markdown text
                     path: "/lib/" // Autoload modules mode, codemirror, marked... dependents libs path
                 });
-                $('a[post-id]').attr("post-id", data.pId);
+                $('a[post-id]').attr("post-id", postId);
                 let autoSaveTime = <%= autoSave %> ;
                 if (autoSaveTime) {
                     if (window.autoSave) clearInterval(window.autoSave);
@@ -214,7 +214,7 @@
         $(e.target).addClass("active");
         let titleEl = document.getElementById('txtTitle');
         let title = pId || '#';
-        $(titleEl).attr('page-id', title);
+        $(titleEl).attr('post-id', title);
         $(txtTitle).attr('placeholder', title);
     }
 
