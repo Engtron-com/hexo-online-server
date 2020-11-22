@@ -128,7 +128,9 @@
     $(".btn-publish").click(function () {
         $.get("/shell?action=clean", function (data, status, xhr) {
             if (status === "success") {  
-                $.get("/shell?action=generate");
+                $.get("/shell?action=generate", function (data, status, xhr) {
+                    if (status === "success") swal('发布成功');
+                });
             }
         })
     });
