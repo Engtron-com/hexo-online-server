@@ -1,5 +1,6 @@
 function initPasteDragImg(Editor){
-    $(Editor).bind('paste', function (event) {
+    var doc = document.getElementById(Editor.id);
+    doc.addEventListener('paste', function (event) {
         event.preventDefault();
         var items = (event.clipboardData || window.clipboardData).items;
         var file = null;
@@ -22,15 +23,15 @@ function initPasteDragImg(Editor){
         uploadImg(file, Editor);
     });
    
-    $(Editor).bind("dragover", function (e) {
+    doc.addEventListener("dragover", function (e) {
         e.preventDefault()
         e.stopPropagation()
     })
-    $(Editor).bind("dragenter", function (e) {
+    doc.addEventListener("dragenter", function (e) {
         e.preventDefault()
         e.stopPropagation()
     })
-    $(Editor).bind("drop", function (e) {
+    doc.addEventListener("drop", function (e) {
         e.preventDefault()
         e.stopPropagation()
         var files = this.files || e.dataTransfer.files;
