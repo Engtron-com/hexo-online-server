@@ -158,9 +158,9 @@
             post: postId
         }, function (data, status, xhr) {
             if (status === "success" && data.success) {
-                let editId = '$'+ pageId + 'editor';
+                let editId = '$'+ postId + 'editor';
                 $('.editormd').attr('id', editId);
-                toggleStyle(e, pageId);
+                toggleStyle(e, postId);
                 let editor = editormd(editId, {
                     width: "100%",
                     height: "95%",
