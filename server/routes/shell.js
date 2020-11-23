@@ -189,6 +189,7 @@ function hexoGenerate(req) {
         e: "hexo generate", next: () => {
             shell({ e: "hexo generate", next: () => {
                 req.session.isLoadingGenerate = false;
+                console.log('发布成功'+req.session.isLoadingGenerate )
             }});
         }
     });

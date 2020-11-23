@@ -7,6 +7,7 @@ router.get('/', function (req, res, next) {
         if (err) {
             req.session.user = "default";
             req.session.login = false;
+            req.session.isLoadingGenerate = false;
         }
         res.redirect(olConfig.indexPath);
     });
