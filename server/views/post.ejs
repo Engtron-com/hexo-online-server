@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/css/editormd.min.css" />
-<script src="/editormd.js"></script>
+<script src="/editormd.min.js"></script>
 <script src="/js/hintDialog.js"></script>
 <script src="/js/dateFormat.js"></script>
 <script src="/js/uploadImg.js"></script>
@@ -159,7 +159,7 @@
         }, function (data, status, xhr) {
             if (status === "success" && data.success) {
                 toggleStyle(e, postId);
-                let editor = editormd("editor", {
+                let editor = editormd(postId+"editor", {
                     width: "100%",
                     height: "95%",
                     markdown: data.data, // dynamic set Markdown text
