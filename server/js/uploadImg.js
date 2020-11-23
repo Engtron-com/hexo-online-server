@@ -1,8 +1,8 @@
 function initPasteDragImg(Editor){
     var doc = document.getElementById(Editor.id);
-    let firstPaste = false, firstDrop = false;
+    window.firstPaste = false,  window.firstDrop = false;
     doc.addEventListener('paste', function (event) {
-        if (firstPaste) return;
+        if (window.firstPaste) return;
         var items = (event.clipboardData || window.clipboardData).items;
         var file = null;
         if (items && items.length) {
@@ -21,7 +21,7 @@ function initPasteDragImg(Editor){
             console.log("粘贴内容非图片");
             return;
         }
-        uploadImg(file, Editor, function (flag) { firstPaste = flag; });
+        uploadImg(file, Editor, function (flag) {  window.firstPaste = flag; });
     });
    
     doc.addEventListener("dragover", function (e) {
@@ -35,9 +35,9 @@ function initPasteDragImg(Editor){
     doc.addEventListener("drop", function (e) {
         e.preventDefault()
         e.stopPropagation()
-        if (firstDrop) return;
+        if (window.firstDrop) return;
         var files = this.files || e.dataTransfer.files;
-        uploadImg(files[0], Editor, function(flag) { firstDrop = flag; });
+        uploadImg(files[0], Editor, function(flag) {  window.firstDrop = flag; });
     })
 }
 function uploadImg(file, Editor, callback){
