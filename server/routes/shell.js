@@ -17,6 +17,7 @@ var info = {}
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
+    console.log(req.session.isLoadingGenerate);
     if (req.session.user === olConfig.user && req.session.isLogin && !req.session.isLoadingGenerate) {
         switch (req.query.action) {
             case "pull":
@@ -46,8 +47,7 @@ router.get('/', function (req, res, next) {
                 res.end();
                 break;
             case "generate": 
-                hexoGenerate(req);
-                res.end();
+                hexoGenerate(req, res);
                 break;
             case "deploy":
                 hexoDeploy();
@@ -183,12 +183,13 @@ function closeServer() {
         });
     }
 }
-function hexoGenerate(req) {
+function hexoGenerate(req, res) {
     req.session.isLoadingGenerate = true;
     shell({
         e: "hexo generate", next: () => {
             shell({ e: "hexo generate", next: () => {
                 req.session.isLoadingGenerate = false;
+                res.end();
                 console.log('发布成功'+req.session.isLoadingGenerate )
             }});
         }
