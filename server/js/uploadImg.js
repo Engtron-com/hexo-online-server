@@ -21,7 +21,7 @@ function initPasteDragImg(Editor){
             console.log("粘贴内容非图片");
             return;
         }
-        uploadImg(file, Editor, (flag) => { firstPaste = flag; });
+        uploadImg(file, Editor, function (flag) { firstPaste = flag; });
     });
    
     doc.addEventListener("dragover", function (e) {
@@ -37,7 +37,7 @@ function initPasteDragImg(Editor){
         e.stopPropagation()
         if (firstDrop) return;
         var files = this.files || e.dataTransfer.files;
-        uploadImg(files[0], Editor, (flag) => { firstDrop = flag; });
+        uploadImg(files[0], Editor, function(flag) { firstDrop = flag; });
     })
 }
 function uploadImg(file, Editor, callback){
