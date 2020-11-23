@@ -17,7 +17,7 @@ var info = {}
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    if (req.session.user === olConfig.user && req.session.isLogin) {
+    if (req.session.user === olConfig.user && req.session.isLogin && !req.session.isLoadingGenerate) {
         switch (req.query.action) {
             case "pull":
                 gitPull();
@@ -46,7 +46,7 @@ router.get('/', function (req, res, next) {
                 res.end();
                 break;
             case "generate": 
-                hexoGenerate();
+                hexoGenerate(req);
                 res.end();
                 break;
             case "deploy":
@@ -88,7 +88,7 @@ router.get('/', function (req, res, next) {
         res.render('login', { script: '' });
     }
 }).post('/', upload.single('editormd-image-file'), function (req, res, next) {
-    if (req.session.user === olConfig.user && req.session.isLogin) {
+    if (req.session.user === olConfig.user && req.session.isLogin && !req.session.isLoadingGenerate) {
         let data = null;
         switch (req.query.action) {
             case "save_post":
@@ -183,10 +183,13 @@ function closeServer() {
         });
     }
 }
-function hexoGenerate() {
+function hexoGenerate(req) {
+    req.session.isLoadingGenerate = true;
     shell({
         e: "hexo generate", next: () => {
-            shell({ e: "hexo generate" });
+            shell({ e: "hexo generate", next: () => {
+                req.session.isLoadingGenerate = false;
+            }});
         }
     });
 }

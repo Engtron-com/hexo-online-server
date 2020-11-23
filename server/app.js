@@ -23,7 +23,7 @@ app.use(session({
   secret: olConfig.secret,
   resave: false,
   saveUninitialized: true,
-  cookie: { user: "default" }
+  cookie: { user: "default", isLoadingGenerate: false }
 }));
 
 var indexPath = olConfig.indexPath;

@@ -53,8 +53,7 @@
                     post: name
                 }, function (data, status) {
                     if (status === "success" && data.success) {
-                        addNode(data.name);
-                        swal(data.msg, 'success');
+                        addNode(data);
                     }
                 });
                 break;
@@ -129,7 +128,13 @@
         $.get("/shell?action=clean", function (data, status, xhr) {
             if (status === "success") {  
                 $.get("/shell?action=generate", function (data, status, xhr) {
-                    if (status === "success") swal('发布成功', 'success');
+                    if (status === "success") {
+                        $('.editormd-container-mask').show();
+                        setTimeout(()=> { 
+                            $('.editormd-container-mask').hide();
+                            swal('发布成功', 'success'); 
+                        }, 2000);
+                    }
                 });
             }
         })
@@ -193,18 +198,21 @@
         $("a[post]")[0] && $("a[post]")[0].click();
     }
 
-    function addNode(name) {
+    function addNode(data) {
         let a = document.createElement('a');
         a.href = "javascript:void(0)";
         a.className = "list-group-item";
-        a.setAttribute('data-href', name);
+        a.setAttribute('data-href', data.name);
         a.setAttribute('post', '');
         a.style = "position: relative;display:none";
-        a.innerText = name;
+        a.innerText = data.name;
         $('#post-group').append(a);
         $(a).bind('click', getPost);
+        $('.editormd-container-mask').show();
         setTimeout( () => {
+            swal(data.msg, 'success');
             $(a).show();
+            $('.editormd-container-mask').hide();
             $(a).click();
         }, 1500);
     }
