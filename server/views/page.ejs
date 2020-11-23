@@ -198,9 +198,9 @@
 
     function removeEvent() {
         let editor = document.getElementById('editor');
-        editor.removeEventListener('paste');
-        editor.removeEventListener('dragover');
-        editor.removeEventListener('dragenter');
-        editor.removeEventListener('drop');
+        editor.removeEventListener('paste', ()=> { console.log('移除成功')});
+        editor.removeEventListener('dragover', ()=> { console.log('移除成功')});
+        editor.removeEventListener('dragenter', ()=> { console.log('移除成功')});
+        editor.removeEventListener('drop', ()=> { console.log('移除成功')});
     }
 </script>
