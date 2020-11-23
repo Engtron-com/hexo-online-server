@@ -158,8 +158,8 @@
             post: postId
         }, function (data, status, xhr) {
             if (status === "success" && data.success) {
-                $('#editor').remove();
                 $('#editor').empty();
+                removeEvent();
                 toggleStyle(e, postId);
                 let editor = editormd('editor', {
                     width: "100%",
@@ -235,5 +235,13 @@
                 time = null;
             }, delay)
         }
+    }
+
+    function removeEvent() {
+        let editor = document.getElementById('editor');
+        editor.removeEventListener('paste');
+        editor.removeEventListener('dragover');
+        editor.removeEventListener('dragenter');
+        editor.removeEventListener('drop');
     }
 </script>
