@@ -1,8 +1,6 @@
 function initPasteDragImg(Editor){
     var doc = document.getElementById(Editor.id);
-    window.firstPaste = false,  window.firstDrop = false;
     doc.addEventListener('paste', function (event) {
-        if (window.firstPaste) return;
         var items = (event.clipboardData || window.clipboardData).items;
         var file = null;
         if (items && items.length) {
@@ -21,7 +19,7 @@ function initPasteDragImg(Editor){
             console.log("粘贴内容非图片");
             return;
         }
-        uploadImg(file, Editor, function (flag) {  window.firstPaste = flag; });
+        uploadImg(file, Editor);
     });
    
     doc.addEventListener("dragover", function (e) {
@@ -35,34 +33,31 @@ function initPasteDragImg(Editor){
     doc.addEventListener("drop", function (e) {
         e.preventDefault()
         e.stopPropagation()
-        if (window.firstDrop) return;
         var files = this.files || e.dataTransfer.files;
-        uploadImg(files[0], Editor, function(flag) {  window.firstDrop = flag; });
+        uploadImg(files[0], Editor);
     })
 }
-function uploadImg(file, Editor, callback){
+function uploadImg(file, Editor){
     let formData = new FormData();
     formData.append('editormd-image-file', file);
     $.ajax({
         type : 'post',
         url : Editor.settings.imageUploadURL,
         data: formData,
-        processData:false,
+        processData: false,
         async: true,
         cache: false,  
         contentType: false, 
-        success:function(re){
-            let url = re.url;
+        success:function(res){
+            let url = res.url;
             if(/(png|jpg|jpeg|gif|bmp|ico|image)/.test(url)){
                 Editor.insertValue("![图片alt]("+url+")");
             }else{
                 Editor.insertValue("[下载附件]("+url+")");
             }
-            if (callback && typeof callback === 'function') callback(false);
         },
         error:function(e){
             console.log(e);
         }
     });
-    if (callback && typeof callback === 'function') callback(true);
 }

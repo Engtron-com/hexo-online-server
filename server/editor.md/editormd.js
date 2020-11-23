@@ -3961,9 +3961,6 @@
 		markdownDoc = new String(markdownDoc);
         
         var markdownParsed = marked(markdownDoc, markedOptions);
-        console.log('-------------------------------------------------------------------------')
-        console.log(markdownDoc)
-        console.log(markedOptions)
         markdownParsed = editormd.filterHTMLTags(markdownParsed, settings.htmlDecode);
         
         if (settings.markdownSourceCode) {
