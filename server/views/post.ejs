@@ -158,7 +158,7 @@
             post: postId
         }, function (data, status, xhr) {
             if (status === "success" && data.success) {
-                let editClass = dateFormat('HHmmss')+ '-editor';
+                let editClass = 'editor-' + dateFormat('HHmmss');
                 $('#editor').attr('class', editClass);
                 toggleStyle(e, postId);
                 let editor = editormd('editor', {
