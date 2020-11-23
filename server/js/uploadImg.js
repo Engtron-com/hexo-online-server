@@ -1,6 +1,6 @@
 function initPasteDragImg(Editor){
     var doc = document.getElementById(Editor.id);
-    let firstPaste = false, firstDrop = false;
+    let firstPaste = false;
     doc.addEventListener('paste', function (event) {
         if (firstPaste) return;
         var items = (event.clipboardData || window.clipboardData).items;
@@ -21,8 +21,7 @@ function initPasteDragImg(Editor){
             console.log("粘贴内容非图片");
             return;
         }
-        uploadImg(file, Editor);
-        firstPaste = true;
+        uploadImg(file, Editor, () => { firstPaste = flag; });
     });
    
     doc.addEventListener("dragover", function (e) {
@@ -37,12 +36,12 @@ function initPasteDragImg(Editor){
         e.preventDefault()
         e.stopPropagation()
         if (firstDrop) return;
+        let firstDrop = false;
         var files = this.files || e.dataTransfer.files;
-        uploadImg(files[0], Editor);
-        firstDrop = true;
+        uploadImg(files[0], Editor, (flag) => { firstDrop = flag; });
     })
 }
-function uploadImg(file, Editor){
+function uploadImg(file, Editor, callback){
     let formData = new FormData();
     formData.append('editormd-image-file', file);
     $.ajax({
@@ -60,11 +59,11 @@ function uploadImg(file, Editor){
             }else{
                 Editor.insertValue("[下载附件]("+url+")");
             }
-            firstPaste = false;
-            firstDrop = false;
+            if (callback && typeof callback === 'function') callback(false);
         },
         error:function(e){
             console.log(e);
         }
-    })
+    });
+    if (callback && typeof callback === 'function') callback(true);
 }
