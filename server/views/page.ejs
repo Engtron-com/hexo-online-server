@@ -120,7 +120,7 @@
             page: pageId
         }, function (data, status, xhr) {
             if (status === "success" && data.success) {
-                let editClass = '$'+ pageId+ 'editor';
+                let editClass = pageId+ 'editor';
                 $('#editor').attr('class', editClass);
                 toggleStyle(e, pageId);
                 let editor = editormd('editor', {
