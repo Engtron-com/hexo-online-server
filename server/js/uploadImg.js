@@ -1,5 +1,5 @@
-function initPasteDragImg(Editor){
-    var doc = document.getElementById(Editor.id) 
+function initPasteDragImg(Editor, className){
+    var doc = document.querySelector(className) 
     doc.addEventListener('paste', function (event) {
         event.preventDefault();
         var items = (event.clipboardData || window.clipboardData).items;
@@ -22,16 +22,16 @@ function initPasteDragImg(Editor){
         }
         uploadImg(file, Editor);
     });
-    var dashboard = document.getElementById(Editor.id)
-    dashboard.addEventListener("dragover", function (e) {
+   
+    doc.addEventListener("dragover", function (e) {
         e.preventDefault()
         e.stopPropagation()
     })
-    dashboard.addEventListener("dragenter", function (e) {
+    doc.addEventListener("dragenter", function (e) {
         e.preventDefault()
         e.stopPropagation()
     })
-    dashboard.addEventListener("drop", function (e) {
+    doc.addEventListener("drop", function (e) {
         e.preventDefault()
         e.stopPropagation()
         var files = this.files || e.dataTransfer.files;
