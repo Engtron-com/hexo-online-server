@@ -1,7 +1,8 @@
 function initPasteDragImg(Editor){
     var doc = document.getElementById(Editor.id);
+    let firstPaste = false, firstDrop = false;
     doc.addEventListener('paste', function (event) {
-        event.preventDefault();
+        if (firstPaste) return;
         var items = (event.clipboardData || window.clipboardData).items;
         var file = null;
         if (items && items.length) {
@@ -21,6 +22,7 @@ function initPasteDragImg(Editor){
             return;
         }
         uploadImg(file, Editor);
+        firstPaste = true;
     });
    
     doc.addEventListener("dragover", function (e) {
@@ -34,8 +36,10 @@ function initPasteDragImg(Editor){
     doc.addEventListener("drop", function (e) {
         e.preventDefault()
         e.stopPropagation()
+        if (firstDrop) return;
         var files = this.files || e.dataTransfer.files;
         uploadImg(files[0], Editor);
+        firstDrop = true;
     })
 }
 function uploadImg(file, Editor){
@@ -46,7 +50,7 @@ function uploadImg(file, Editor){
         url : Editor.settings.imageUploadURL,
         data: formData,
         processData:false,
-        async:false,
+        async: true,
         cache: false,  
         contentType: false, 
         success:function(re){
@@ -55,7 +59,9 @@ function uploadImg(file, Editor){
                 Editor.insertValue("![图片alt]("+url+")");
             }else{
                 Editor.insertValue("[下载附件]("+url+")");
-            }    
+            }
+            firstPaste = false;
+            firstDrop = false;
         },
         error:function(e){
             console.log(e);
