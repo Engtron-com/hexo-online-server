@@ -3,6 +3,7 @@
 <script src="/js/hintDialog.js"></script>
 <script src="/js/dateFormat.js"></script>
 <script src="/js/uploadImg.js"></script>
+<script src="/js/base.js"></script>
 <div style="width: 20%;position: fixed;top:51px;bottom: 0;border-right: 1px solid #333333;height: 95%;">
     <div id="post-group" style="width: 100%;height: 95%;overflow-x: hidden;max-height: 95%;overflow-y: auto;background: #ffffff;">
         <% posts.forEach(function(post){ %>
@@ -93,6 +94,7 @@
                 success : function(data) {
                     if(data.success) {
                         let name = data.new_name;
+                        $(titleEl).attr('post-id', name);
                         $(currentEl).text(name);
                         $.ajax({
                             url: '/shell?action=save_post',
@@ -237,6 +239,15 @@
             }
         });
     }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.which === 83) {
+            e.preventDefault();
+            nextTick(() => {
+                $(".btn-save").click();
+            }) 
+        }
+    })
 
     function throttle(fun, delay) {
         let time = null;

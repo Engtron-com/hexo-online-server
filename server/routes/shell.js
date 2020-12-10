@@ -17,7 +17,6 @@ var info = {}
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    console.log(req.session.isLoadingGenerate);
     if (req.session.user === olConfig.user && req.session.isLogin && !req.session.isLoadingGenerate) {
         switch (req.query.action) {
             case "pull":

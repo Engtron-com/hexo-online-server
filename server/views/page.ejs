@@ -3,6 +3,7 @@
 <script src="/js/hintDialog.js"></script>
 <script src="/js/dateFormat.js"></script>
 <script src="/js/uploadImg.js"></script>
+<script src="/js/base.js"></script>
 <div style="width: 20%;position: fixed;top:51px;bottom: 0;border-right: 1px solid #333333;height: 95%;">
     <div id="blog-group" style="width: 100%;height: 95%;overflow-x: hidden;max-height: 95%;overflow-y: auto;background: #ffffff;">
         <% pages.forEach(function(page){ %>
@@ -90,6 +91,7 @@
                 type: 'get',
                 success : function(data) {
                     let name = data.new_name;
+                    $(titleEl).attr('page-id', name);
                     $(currentEl).text(name);
                     $.post('/shell?action=save_page', {
                         page: name,
@@ -210,4 +212,12 @@
         });
     }
 
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.which === 83) {
+            e.preventDefault();
+            nextTick(() => {
+                $(".btn-save").click();
+            }) 
+        }
+    })
 </script>
