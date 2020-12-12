@@ -152,9 +152,9 @@
     //     $(data.el).html(data.data);
     //   }
     // };
-    ws.onclose = function (ev) {
-      getPageParams('/logout');
-    };
+    // ws.onclose = function (ev) {
+    //   getPageParams('/logout');
+    // };
     ws.onerror = function (ev) {
       swal("重新连接...", "error");
       ws = new WebSocket('<%- ssl?"wss":"ws" %>://' + window.location.hostname + ':<%= wsPort %>');
