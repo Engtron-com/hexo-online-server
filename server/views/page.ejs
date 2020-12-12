@@ -124,6 +124,7 @@
                 toggleStyle(e, pageId);
                 if (window.pageEditor) {
                     window.pageEditor = window.pageEditor.setMarkdown(data.data);
+                    window.pageEditor.recreate();
                 } else {
                     registerMarkdown(data.data);
                 }
