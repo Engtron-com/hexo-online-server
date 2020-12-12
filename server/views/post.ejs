@@ -168,7 +168,7 @@
                 toggleStyle(e, postId);
                 if (window.postEditor) {
                     window.postEditor = postEditor.setMarkdown(data.data);
-                    window.postEditor.recreate();
+                    window.postEditor.resize();
                 } else {
                     registerMarkdown(data.data);
                 }

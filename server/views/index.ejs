@@ -17,6 +17,8 @@
           window.history.pushState({
             status: 0
           }, '', href);
+          window.postEditor = null;
+          window.pageEditor = null;
           $("#container").html(data);
         }
       });
