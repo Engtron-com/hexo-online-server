@@ -152,50 +152,48 @@
     //     $(data.el).html(data.data);
     //   }
     // };
-    // ws.onclose = function (ev) {
-    //   swal("\nWebSocket连接关闭");
-    //   swal("\n正在重连WebSocket...");
-    //   ws = new WebSocket('<%- ssl?"wss":"ws" %>://' + window.location.hostname + ':<%= wsPort %>');
-    // };
-    // ws.onerror = function (ev) {
-    //   swal("\nWebSocket连接出错", "error");
-    //   console.log(ev);
-    // };
-      function swal(e, type = 'message') {
-        if ($(".output").length > 0) {
-          $(".output")[0].value += e;
-          $(".output").scrollTop($(".output")[0].scrollHeight);
-        } else {
-          switch (type) {
-            case "success":
-              alertify.success(e);
-              break;
-            case "error":
-            case "warning":
-              alertify.error(e);
-              break;
-            case "message":
-              alertify.log(e);
-              break;
-            default:
-              alertify.log(e);
-              break;
-          }
+    ws.onclose = function (ev) {
+      getPageParams('/logout');
+    };
+    ws.onerror = function (ev) {
+      swal("重新连接...", "error");
+      ws = new WebSocket('<%- ssl?"wss":"ws" %>://' + window.location.hostname + ':<%= wsPort %>');
+    };
+    function swal(e, type = 'message') {
+      if ($(".output").length > 0) {
+        $(".output")[0].value += e;
+        $(".output").scrollTop($(".output")[0].scrollHeight);
+      } else {
+        switch (type) {
+          case "success":
+            alertify.success(e);
+            break;
+          case "error":
+          case "warning":
+            alertify.error(e);
+            break;
+          case "message":
+            alertify.log(e);
+            break;
+          default:
+            alertify.log(e);
+            break;
         }
       }
-      $("a[pjax]").bind("click", function (e) {
-        if (window.autoSave) clearInterval(window.autoSave);
-        $("ul.nav li").removeClass("active");
-        $(this).parent().addClass('active');
-        let path = $(this).attr("href");
-        getPageParams(path);
-        return false;
-      });
+    }
+    $("a[pjax]").bind("click", function (e) {
+      if (window.autoSave) clearInterval(window.autoSave);
+      $("ul.nav li").removeClass("active");
+      $(this).parent().addClass('active');
+      let path = $(this).attr("href");
+      getPageParams(path);
+      return false;
+    });
 
-      function switchActive(pathname) {
-        $("ul.nav li").removeClass("active");
-        $('a[href="' + pathname + '"]').parent().addClass('active');
-      }
+    function switchActive(pathname) {
+      $("ul.nav li").removeClass("active");
+      $('a[href="' + pathname + '"]').parent().addClass('active');
+    }
   </script>
 </body>
 
