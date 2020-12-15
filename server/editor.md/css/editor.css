@@ -36,33 +36,38 @@
     width: 80%;
     top: 52px;
     height: 95%;
+    display: flex;
+    flex-direction: column;
 }
 
 .el-form-item__content {
     width:100%;
-    height:5%;
+    /* height:5%; */
     background-color: #dddddd;
     padding-top: 4px;
-    margin-left: 10px;
+    padding-left: 10px;
 }
 
 .el-input {
     width: 86%;
     height: 38px; 
     float: left;
+    display: flex;
+    flex-direction: row;
 }
 
 .el-input span {
-    width: 5%;
+    width: 6%;
     display: inline-block;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     line-height: 38px;
+    float: left;
 }
 
 .el-input__inner {
-    width: 95%;
+    width: 94%;
     outline: none; 
     height: 38px;
     border: 1px solid #f3f3f3;

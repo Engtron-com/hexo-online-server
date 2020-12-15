@@ -1,6 +1,6 @@
 function  redirectHandle(xhr) {
     if (xhr.status == 503) {
-        window.location.href = window.location.host + '/login';
+        window.location.href = '/login';
     }
 }
 
