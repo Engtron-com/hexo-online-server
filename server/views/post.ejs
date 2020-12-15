@@ -1,46 +1,39 @@
 <link rel="stylesheet" href="/css/editormd.min.css" />
+<link rel="stylesheet" href="/css/editor.css" />
 <script src="/editormd.min.js"></script>
 <script src="/js/hintDialog.js"></script>
 <script src="/js/dateFormat.js"></script>
 <script src="/js/uploadImg.js"></script>
 <script src="/js/base.js"></script>
-<div style="width: 20%;position: fixed;top:51px;bottom: 0;border-right: 1px solid #333333;height: 95%;">
-    <div id="post-group" style="width: 100%;height: 95%;overflow-x: hidden;max-height: 95%;overflow-y: auto;background: #ffffff;">
+<div class="post-left">
+    <div id="post-group">
         <% posts.forEach(function(post){ %>
             <a href="javascript:void(0)" data-href="<%= post %>" class="list-group-item" post style="position: relative;"><%= post %></a>
         <% }); %>
     </div>
-    <div style="width: 100%;height: 5%;padding-top: 4px;display: flex; justify-content: center;padding: 0;">
-        <!-- <input type="text" id="search" style="width: 60%;outline: none;height: 38px;border-radius: 15px; border: 1px solid #f3f3f3;background: #ffffff;color: #4d4d4d;margin-top: 4px;" placeholder="搜索" /> -->
-        <a name="new" href="javascript:void(0)" data-href="/shell?action=new_post" style="padding: 12px 20px;flex: 6;" wss type="button" class="btn btn-default">新增</a>
-        <a name="delete" href="javascript:void(0)" data-href="/shell?action=delete_post" wss type="button" style="padding: 12px 20px;flex: 6;" class="btn btn-default" post-id="#">删除</a>
+    <div class="btn-bottom-box">
+        <a name="new" href="javascript:void(0)" data-href="/shell?action=new_post" wss type="button" class="btn btn-default">新增</a>
+        <a name="delete" href="javascript:void(0)" data-href="/shell?action=delete_post" wss type="button" class="btn btn-default" post-id="#">删除</a>
     </div>
 </div>
-<div class="btn-group" style="position: fixed;margin-left: 20%;width: 80%;top: 52px;height: 95%;"> 
-    <div class="el-form-item__content" style="width:100%;height:5%;background-color: #dddddd;padding-top: 4px;margin-left: 10px;">
-        <div class="input__title flex1 el-input" style="width: 86%;height: 38px; float: left;">
-            文章管理：<input type="text" style="width: 94.5%;outline: none; height: 38px;border: 1px solid #f3f3f3;padding:0 10px; background: #ffffff;color: #4d4d4d;" autocomplete="off" id="postTitle" post-id="#" maxlength="100" placeholder="2020-11-18" class="el-input__inner"/>
+<div class="btn-group"> 
+    <div class="el-form-item__content">
+        <div class="input__title flex1 el-input">
+            <span>文章管理：</span><input type="text" autocomplete="off" id="postTitle" post-id="#" maxlength="100" placeholder="2020-11-18" class="el-input__inner"/>
             <!-- <span class="el-input__suffix"><span class="el-input__suffix-inner">
             <span class="el-input__count"><span class="el-input__count-inner">10/100</span></span></span>
             </span> -->
         </div>
-        <div class="article-bar__user-box flex flex--row flex--align-center" style="width: 14%;display: flex;flex-direction: row;justify-content: center;float: left;">
-            <button type="button" style="padding: 6px 20px;
-            font-size: 16px;
-            color: #e33e33;
-            border: 1px solid #e33e33; margin: 2px 10px;" class="el-button btn btn-save el-button--text">保存</button>
-            <button type="button" style="padding: 6px 20px;
-            font-size: 16px;
-            color: #ffffff;
-            border: 1px solid #e33e33;background:#e33e33 ; margin: 2px 10px;" class="el-button btn btn-publish el-button--primary">发布</button>
+        <div class="article-bar__user-box flex flex--row flex--align-center">
+            <button type="button" class="el-button btn btn-save el-button-save">保存</button>
+            <button type="button" class="el-button btn btn-publish el-button-primary">发布</button>
         </div>
     </div>
-    <!-- <a name="rename" href="/shell?action=rename_post" wss type="button" class="btn btn-default" post-id="#">重命名</a> -->
-    <div id="editor" style="width: 100%;height:95%;">
+    <div id="editor">
     </div>
 </div>
+
 <script>
-    
     $("a[post]").bind("click", getPost);
 
     firstClickItem();
@@ -133,10 +126,6 @@
                 if (autoSaveTime) {
                     if (window.autoSave) clearInterval(window.autoSave);
                     window.autoSave = setInterval(() => {
-                        // $.post("/shell?action=save_post", {
-                        //     post: $(".list-group-item.active").text(),
-                        //     data: $(".editormd-markdown-textarea").val()
-                        // });
                         savePost(false);
                     }, autoSaveTime);
                 }
@@ -195,6 +184,7 @@
                         let name = data.new_name;
                         $(titleEl).attr('post-id', name);
                         $(currentEl).text(name);
+                        $(currentEl).attr("data-href", name);
                         $.ajax({
                             url: '/shell?action=save_post',
                             data: {
@@ -251,21 +241,8 @@
         if (e.ctrlKey && e.which === 83) {
             e.preventDefault();
             nextTick(() => {
-                $(".btn-save").click();
+                savePost(true);
             }) 
         }
     })
-
-    function throttle(fun, delay) {
-        let time = null;
-        return function() {
-            if (time) {
-            return;
-            }
-            time = setTimeout(()=> {
-                fun.call(null, ...arguments);
-                time = null;
-            }, delay)
-        }
-    }
 </script>

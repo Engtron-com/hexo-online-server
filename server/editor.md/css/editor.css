@@ -1,0 +1,101 @@
+.post-left, .page-left {
+    width: 20%;
+    position: fixed;
+    top:51px;
+    bottom: 0;
+    border-right: 1px solid #333333;
+    height: 95%;
+}
+
+#post-group, #blog-group {
+    width: 100%;
+    height: 95%;
+    overflow-x: hidden;
+    max-height: 95%;
+    overflow-y: auto;
+    background: #ffffff;
+}
+
+.btn-bottom-box {
+    width: 100%;
+    height: 5%;
+    padding-top: 4px;
+    display: flex; 
+    justify-content: center;
+    padding: 0;
+}
+
+.btn-bottom-box a {
+    padding: 12px 20px;
+    flex: 6;
+}
+
+.btn-group {
+    position: fixed;
+    margin-left: 20%;
+    width: 80%;
+    top: 52px;
+    height: 95%;
+}
+
+.el-form-item__content {
+    width:100%;
+    height:5%;
+    background-color: #dddddd;
+    padding-top: 4px;
+    margin-left: 10px;
+}
+
+.el-input {
+    width: 86%;
+    height: 38px; 
+    float: left;
+}
+
+.el-input span {
+    width: 5%;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: 38px;
+}
+
+.el-input__inner {
+    width: 95%;
+    outline: none; 
+    height: 38px;
+    border: 1px solid #f3f3f3;
+    padding:0 10px; 
+    background: #ffffff;
+    color: #4d4d4d;
+}
+
+.article-bar__user-box {
+    width: 14%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    float: left;
+}
+
+.el-button-save {
+    padding: 6px 20px;
+    font-size: 16px;
+    color: #e33e33;
+    border: 1px solid #e33e33; 
+    margin: 2px 10px;
+}
+
+.el-button-primary {
+    padding: 6px 20px;
+    font-size: 16px;
+    color: #ffffff;
+    border: 1px solid #e33e33;background:#e33e33; 
+    margin: 2px 10px;
+}
+
+#editor {
+    width: 100%;
+    height:95%;
+}
