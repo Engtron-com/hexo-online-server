@@ -90,22 +90,22 @@
         })
     });
 
-    $("#search").bind('input', throttle(function(e) {
-        let val = $(this).val();
-        let aList = document.querySelectorAll('.list-group-item');
-        if (!val) {
-            aList.forEach( aEl => {
-                aEl.style.display = 'block';
-            })
-        } else {
-            aList.forEach( aEl => {
-                let text = aEl.innerText;
-                if (!text || !text.indexOf(val) === -1) {
-                    aEl.style.display = 'none';
-                }
-            })
-        }
-    }, 1500));
+    // $("#search").bind('input', throttle(function(e) {
+    //     let val = $(this).val();
+    //     let aList = document.querySelectorAll('.list-group-item');
+    //     if (!val) {
+    //         aList.forEach( aEl => {
+    //             aEl.style.display = 'block';
+    //         })
+    //     } else {
+    //         aList.forEach( aEl => {
+    //             let text = aEl.innerText;
+    //             if (!text || !text.indexOf(val) === -1) {
+    //                 aEl.style.display = 'none';
+    //             }
+    //         })
+    //     }
+    // }, 1500));
 
     function getPost(e) {
         let postId = $(this).attr("data-href");
