@@ -1,9 +1,9 @@
 function nextTick(callback) {
     return new Promise((res, rej) => {
         res();
-    }).then( (r) => {
+    }).then( () => {
         if(isFunction(callback)) {
-            callback(r);
+            callback();
         }
     }).catch( e => { throw e });
 }
