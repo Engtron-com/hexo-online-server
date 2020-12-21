@@ -12,8 +12,8 @@
         <% }); %>
     </div>
     <div class="btn-bottom-box">
-        <a name="new" href="javascript:void(0)" data-href="/shell?action=new_page" wss type="button" class="btn btn-default">新增</a>
-        <a name="delete" href="javascript:void(0)" data-href="/shell?action=delete_page" wss type="button" class="btn btn-default" page-id="#">删除</a>
+        <a name="new" href="javascript:void(0)" data-href="shell?action=new_page" wss type="button" class="btn btn-default">新增</a>
+        <a name="delete" href="javascript:void(0)" data-href="shell?action=delete_page" wss type="button" class="btn btn-default" page-id="#">删除</a>
     </div>
 </div>
 <div class="btn-group"> 
@@ -33,6 +33,7 @@
     </div>
 </div>
 <script>
+    var indexPath = "<%= indexPath %>";
     $("a[page]").bind("click", getPage);
     firstClickItem();
     $("a[wss]").bind("click", function (e) {
@@ -41,7 +42,7 @@
         switch ($(this).attr("name")) {
             case "new":
                 let name = '博客' + dateFormat('mmss');
-                $.get(href, {
+                $.get(indexPath + href, {
                     page: name
                 }, function (data, status) {
                     if (status === "success" && data.success) {
@@ -53,7 +54,7 @@
                 let that = this;
                 $.MsgBox.Confirm('温馨提示！', '确认删除当前博客？', function() {
                     let pId = $(that).attr("page-id")
-                    $.get(href, {
+                    $.get(indexPath + href, {
                         page: pId
                     }, function (data, status) {
                         if (status === "success" && data.success) {
@@ -75,7 +76,7 @@
 
     function getPage(e) {
         let pageId = $(this).attr("data-href");
-        $.get('/getPage', {
+        $.get(indexPath + 'getPage', {
             page: pageId
         }, function (data, status, xhr) {
             if (status === "success" && data.success) {
@@ -99,15 +100,15 @@
                 swal("\n获取页面失败", "error");
             }
         });
-        $.get('/shell?action=get_pagename',{
+        $.get(indexPath + 'shell?action=get_pagename', {
             page: pageId
         });
     }
 
     $(".btn-publish").click(function () {
-        $.get("/shell?action=clean", function (data, status, xhr) {
+        $.get(indexPath + "shell?action=clean", function (data, status, xhr) {
             if (status === "success") {  
-                $.get("/shell?action=generate", function (data, status, xhr) {
+                $.get(indexPath + "shell?action=generate", function (data, status, xhr) {
                     if (status === "success") {
                         $('.editormd-container-mask').show();
                         setTimeout(()=> { 
@@ -185,7 +186,7 @@
         let val = $(titleEl).val();
         if (val && old_name !== val) {
             $.ajax({
-                url: '/shell?action=rename_page',
+                url: indexPath + 'shell?action=rename_page',
                 data: {
                     old_name: old_name,
                     new_name: val
@@ -196,7 +197,7 @@
                     $(titleEl).attr('page-id', name);
                     $(currentEl).text(name);
                     $(currentEl).attr("data-href", name);
-                    $.post('/shell?action=save_page', {
+                    $.post(indexPath + 'shell?action=save_page', {
                         page: name,
                         data: $(".editormd-markdown-textarea").val()
                     }, function(data, status) {
@@ -207,7 +208,7 @@
                 }
             })
         } else {
-            $.post('/shell?action=save_page', {
+            $.post(indexPath + 'shell?action=save_page', {
                 page: $(currentEl).text(),
                 data: $(".editormd-markdown-textarea").val()
             }, function(data, status) {

@@ -8,7 +8,7 @@ router.get('/', function (req, res, next) {
     if (req.session.user === olConfig.user && req.session.isLogin) {
         fs.readdir(path.join(hexo.source_dir, '_posts'), function (err, files) {
             if (err) {
-                res.render('post', { posts: [] });
+                res.render('post', { posts: [], indexPath: olConfig.indexPath });
                 console.error(err);
                 return;
             }
@@ -19,9 +19,9 @@ router.get('/', function (req, res, next) {
                 }
             });
             if (req.query.pjax) {
-                res.render('post', { posts, autoSave: olConfig.autoSave });
+                res.render('post', { posts, autoSave: olConfig.autoSave, indexPath: olConfig.indexPath });
             } else {
-                res.render('index', { wsPort: olConfig.wsPort, path: "post", posts, autoSave: olConfig.autoSave, ssl: olConfig.ssl });
+                res.render('index', { wsPort: olConfig.wsPort, path: "post", posts, autoSave: olConfig.autoSave, ssl: olConfig.ssl, indexPath: olConfig.indexPath });
             }
         });
     } else {

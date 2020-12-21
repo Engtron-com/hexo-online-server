@@ -147,7 +147,7 @@ function hexoClean() {
 }
 function hexoServer() {
     shell({
-        e: "hexo generate", next: () => {
+        e: "npm run build", next: () => {
             shell({ e: "hexo server" });
         }
     });
@@ -185,12 +185,10 @@ function closeServer() {
 function hexoGenerate(req, res) {
     req.session.isLoadingGenerate = true;
     shell({
-        e: "hexo generate", next: () => {
-            shell({ e: "hexo generate", next: () => {
-                req.session.isLoadingGenerate = false;
-                res.end();
-                console.log('发布成功'+req.session.isLoadingGenerate )
-            }});
+        e: "npm run build", next: () => {
+            req.session.isLoadingGenerate = false;
+            res.end();
+            console.log('发布成功'+req.session.isLoadingGenerate )
         }
     });
 }
@@ -344,7 +342,7 @@ function upload_file(file) {
     }
     catch (err) {
         return {
-            'url': '/img/' + info.type + '/' + file_name + '/' + file.originalname,
+            'url': hexo.public_dir + '/img/' + info.type + '/' + file_name + '/' + file.originalname,
             'success': 1,
             'massage': err
         }
@@ -359,7 +357,7 @@ function upload_file(file) {
     }
     
     return {
-        'url': '/img/' + info.type + '/' + file_name + '/' + fileName,
+        'url': hexo.public_dir + '/img/' + info.type + '/' + file_name + '/' + fileName,
         'success': 1,
         'massage': '上传成功'
     }

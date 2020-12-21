@@ -12,8 +12,8 @@
         <% }); %>
     </div>
     <div class="btn-bottom-box">
-        <a name="new" href="javascript:void(0)" data-href="/shell?action=new_post" wss type="button" class="btn btn-default">新增</a>
-        <a name="delete" href="javascript:void(0)" data-href="/shell?action=delete_post" wss type="button" class="btn btn-default" post-id="#">删除</a>
+        <a name="new" href="javascript:void(0)" data-href="shell?action=new_post" wss type="button" class="btn btn-default">新增</a>
+        <a name="delete" href="javascript:void(0)" data-href="shell?action=delete_post" wss type="button" class="btn btn-default" post-id="#">删除</a>
     </div>
 </div>
 <div class="btn-group"> 
@@ -34,6 +34,7 @@
 </div>
 
 <script>
+    var indexPath = "<%= indexPath %>";
     $("a[post]").bind("click", getPost);
 
     firstClickItem();
@@ -43,7 +44,7 @@
         switch ($(this).attr("name")) {
             case "new":
                 let name = '文章' + dateFormat('mmss');
-                $.get(href, {
+                $.get(indexPath + href, {
                     post: name
                 }, function (data, status) {
                     if (status === "success" && data.success) {
@@ -55,7 +56,7 @@
                 let that = this;
                 $.MsgBox.Confirm('温馨提示！', '确认删除当前文章？', function() {
                     let pId =  $(that).attr("post-id");
-                    $.get(href, {
+                    $.get(indexPath + href, {
                         post: pId
                     }, function (data, status) {
                         if (status === "success" && data.success) {
@@ -75,9 +76,9 @@
         savePost(true);
     });
     $(".btn-publish").click(function () {
-        $.get("/shell?action=clean", function (data, status, xhr) {
+        $.get(indexPath + "shell?action=clean", function (data, status, xhr) {
             if (status === "success") {  
-                $.get("/shell?action=generate", function (data, status, xhr) {
+                $.get(indexPath + "shell?action=generate", function (data, status, xhr) {
                     if (status === "success") {
                         $('.editormd-container-mask').show();
                         setTimeout(()=> { 
@@ -109,7 +110,7 @@
 
     function getPost(e) {
         let postId = $(this).attr("data-href");
-        $.get('/getPost', {
+        $.get(indexPath + 'getPost', {
             post: postId
         }, function (data, status, xhr) {
             if (status === "success" && data.success) {
@@ -133,7 +134,7 @@
                 swal("\n获取文章失败", "error");
             }
         });
-        $.get('/shell?action=get_postname',{
+        $.get(indexPath + 'shell?action=get_postname',{
             post: postId
         });
     }
@@ -173,7 +174,7 @@
         let val = $(titleEl).val();
         if (val && old_name !== val) {
             $.ajax({
-                url: '/shell?action=rename_post',
+                url: indexPath + 'shell?action=rename_post',
                 data: {
                     old_name: old_name,
                     new_name: val
@@ -186,7 +187,7 @@
                         $(currentEl).text(name);
                         $(currentEl).attr("data-href", name);
                         $.ajax({
-                            url: '/shell?action=save_post',
+                            url: indexPath + 'shell?action=save_post',
                             data: {
                                 post: name,
                                 data: $(".editormd-markdown-textarea").val()
@@ -202,7 +203,7 @@
             })
         } else {
             $.ajax({
-                url: '/shell?action=save_post',
+                url: indexPath + 'shell?action=save_post',
                 data: {
                     post: $(currentEl).text(),
                     data: $(".editormd-markdown-textarea").val()

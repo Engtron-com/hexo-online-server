@@ -9,15 +9,15 @@ router.get('/', function (req, res, next) {
         fs.readdir(hexo.source_dir, function (err, files) {
             let pages = [];
             if (err) {
-                res.render('page', { pages });
+                res.render('page', { pages, indexPath: olConfig.indexPath });
                 console.error(err);
                 return;
             }
             pages = getPages(files);
             if (req.query.pjax) {
-                res.render('page', { pages, autoSave: olConfig.autoSave });
+                res.render('page', { pages, autoSave: olConfig.autoSave, indexPath: olConfig.indexPath });
             } else {
-                res.render('index', { wsPort: olConfig.wsPort, path: "page", pages, autoSave: olConfig.autoSave, ssl: olConfig.ssl });
+                res.render('index', { wsPort: olConfig.wsPort, path: "page", pages, autoSave: olConfig.autoSave, ssl: olConfig.ssl, indexPath: olConfig.indexPath });
             }
         });
     } else {
